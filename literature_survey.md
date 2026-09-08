@@ -26,7 +26,7 @@ candidate misconceptions, embedding similarity retrieves the most plausible
 ones, and a second fine-tuned model reranks them. Evaluated on real tutoring
 dialogues across LLaMA, Qwen, and Claude; LoRA fine-tuning outperformed much
 larger closed models. **Relevance:** a strong architectural alternative to
-our Planner–Executor–Critic loop; worth benchmarking against.
+our Planner–Executor–Critic loop.
 
 **3. "Learning to Make MISTAKEs: Modeling Incorrect Student Thinking And Key
 Errors"** (arXiv:2510.11502, 2025)
