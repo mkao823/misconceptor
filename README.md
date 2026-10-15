@@ -34,19 +34,34 @@ or self-consistency baselines, is a possible and reportable outcome.
 - [docs/LITERATURE_SURVEY.md](docs/LITERATURE_SURVEY.md): literature survey (five areas)
 - [docs/AI_NOVELTY_AUDIT.md](docs/AI_NOVELTY_AUDIT.md): novelty & feasibility audit, with post-feedback addendum
 
-## Repository Structure (current)
+## Repository Structure
 
 ```
-docs/
-  PROJECT_PROPOSAL.md
-  RESEARCH_PLAN.md
-  LITERATURE_SURVEY.md
-  AI_NOVELTY_AUDIT.md
+docs/             # proposal, research plan, literature survey, novelty audit
 data/
-  raw/            # JorGPT CSVs (dataset_en.csv, dataset_es.csv), gitignored, never committed
-.gitignore
-README.md
+  raw/            # JorGPT CSVs, gitignored (never committed)
+  processed/      # derived subsets (gitignored) and reports (tracked)
+taxonomy/         # recursion + Big-O misconception taxonomy (from published sources)
+annotation/       # annotation schema, templates, human labels
+src/
+  config.py       # loads configs/*.yaml; reads API keys from env vars
+  baselines/      # conditions 0-3 and 4b
+  pipeline/       # condition 4: Critic-driven re-retrieval
+  eval/           # macro-F1 + bootstrap CIs, grounding support, kappa
+configs/          # model/API settings and keyword lists (no keys)
+results/          # experiment outputs
+notebooks/        # exploration only
+scripts/          # runnable entry points
+Makefile          # make inspect / scope / ...
+requirements.txt
+.env.example      # env var names for API keys; copy to .env (gitignored)
 ```
 
-TODO: update this block once the scaffold (taxonomy/, annotation/, src/,
-configs/, results/, notebooks/, scripts/) is added.
+## Setup
+
+```bash
+python3 -m pip install -r requirements.txt
+cp .env.example .env   # then fill in keys
+```
+
+Put the JorGPT CSVs in `data/raw/`.

@@ -1,0 +1,21 @@
+# Model and API settings. Do NOT put API keys in this file.
+# Each provider names the environment variable its key is read from
+# (see .env.example); src/config.py resolves it at runtime.
+
+# TODO: choose the base model used for every ablation condition.
+default_model: TODO
+
+providers:
+  # TODO: fill in the providers actually used. These are placeholders.
+  example_provider:
+    api_key_env: EXAMPLE_API_KEY
+    base_url: null        # set for OpenAI-compatible / local endpoints
+    models: []
+
+generation:
+  temperature: 0.0        # single-pass conditions
+  max_output_tokens: 1024
+
+self_consistency:         # condition 4b
+  n_samples: TODO         # set so the total token budget matches condition 4
+  temperature: 0.7

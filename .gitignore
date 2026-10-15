@@ -1,5 +1,14 @@
-# Raw data is never committed
-data/raw/
+# Raw data is never committed (only the folder README is tracked)
+data/raw/*
+!data/raw/README.md
+
+# Derived tabular data stays local; markdown reports are tracked
+data/processed/*.csv
+data/processed/*.jsonl
+data/processed/*.parquet
+
+# Secrets
+.env
 
 # OS / editor
 .DS_Store
@@ -8,4 +17,4 @@ data/raw/
 __pycache__/
 *.pyc
 .venv/
-.env
+.ipynb_checkpoints/
