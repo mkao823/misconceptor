@@ -80,3 +80,49 @@ research problem**, not as inventing misconception detection from scratch,
 and lead the final report's related-work section with the four
 misconception-detection/knowledge-tracing papers identified above to
 preempt reviewer concerns about novelty.
+---
+
+## Addendum (October 2026): after professor feedback
+
+*The original audit above is preserved as written. This addendum records what
+it missed and what changed. It is not a resubmission.*
+
+### What the professor's feedback caught that this audit did not
+
+1. **Label mismatch.** The Feasibility section called JorGPT
+   "ground-truth-adjacent … immediately usable for annotation and evaluation."
+   JorGPT provides 0–10 human scores, free-text feedback and multi-LLM
+   evaluations, but **no misconception labels**. Diagnostic accuracy therefore
+   cannot be measured against JorGPT as-is. We must define a taxonomy and build
+   a human-annotated eval subset ourselves.
+2. **Missing baselines.** The audit treated the Planner–Executor–Critic +
+   agentic RAG pipeline as the core deliverable and never asked whether a
+   simpler system would match it. No keyword baseline, no single-pass
+   taxonomy baseline and no compute-matched control were planned.
+3. **Coarse outputs.** The planned misconception / partial / none labels
+   detect that a misconception exists without naming which one.
+4. **Citation-presence grounding.** Nothing measured whether cited evidence
+   actually supports the diagnosis.
+5. **Novelty framed as a combination of components.** "(a) + (b) + (c)" is a
+   combination of components, which the class-wide guidance explicitly says
+   is not a contribution.
+6. **Dangling reference.** The Recommendation cites "the four
+   misconception-detection/knowledge-tracing papers identified above," but no
+   papers are listed in this audit.
+
+### What changed
+
+| Area | Before | After |
+|---|---|---|
+| Scope | STEM courses generally | Recursion and Big-O / complexity analysis only |
+| Labels | misconception / partial / none | Specific taxonomy ID from published CS misconception literature, plus `none` and `insufficient_evidence` |
+| Ground truth | Assumed from JorGPT | Small human-annotated subset with a second rater (Cohen's kappa). Coverage to be checked in a feasibility pilot first |
+| Contribution | Integration of RAG + Critic + longitudinal tracking | One mechanism claim: critic-driven, insufficiency-triggered re-retrieval beats single-pass taxonomy-grounded classification |
+| Baselines | None | Ladder 0–4b: keyword, direct LLM, +RAG, +taxonomy/few-shot, +Critic loop, token-matched self-consistency |
+| Controls | None | Positive control (withheld-evidence cases); paraphrase check for keyword shortcutting |
+| Metrics | Accuracy on 50+ cases | Macro-F1 with bootstrap CIs per condition; human-rated grounding support (supports / partially / unrelated) |
+| Null result | Not considered | Explicitly reportable: the agentic loop may not be needed for a narrow, well-catalogued domain |
+| Dashboard, longitudinal tracking, 3+ LLM comparison | Core / near-core | Stretch goals |
+
+Details: [PROJECT_PROPOSAL.md](PROJECT_PROPOSAL.md) (Changes after feedback),
+[RESEARCH_PLAN.md](RESEARCH_PLAN.md).

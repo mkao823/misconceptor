@@ -1,0 +1,11 @@
+# Raw data is never committed
+data/raw/
+
+# OS / editor
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env

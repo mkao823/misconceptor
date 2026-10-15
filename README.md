@@ -1,4 +1,4 @@
-# misconceptor: An Agentic Diagnostic System for Open-Ended Exam Responses
+# Misconceptor: Diagnosing Specific Recursion and Big-O Misconceptions in Open-Ended CS Exam Answers
 
 **Team Members:** Michael Kao
 
@@ -8,39 +8,45 @@
 
 ## Abstract
 
-Automated grading tools tell an instructor *whether* a student's open-ended
-answer was correct; they rarely tell the instructor *why* it was wrong.
-Misconceptor is an agentic diagnostic system that reads open-ended exam
-responses and identifies the specific conceptual misconception underlying an
-incorrect (or superficially correct but poorly reasoned) answer, grounds that
-diagnosis in the instructor's own course material via retrieval-augmented
-generation, and aggregates per-student and per-class misconception patterns
-into an actionable dashboard for the instructor. Unlike prior work that
-optimizes for scoring accuracy, our system is evaluated on *diagnostic
-accuracy* against human-labeled misconception categories, compares at least
-three LLMs (including a locally-hosted open-weight model) on this task, and
-tracks how a given student's misconception profile evolves across multiple
-assessments over a semester. The target users are course instructors —
-starting with STEM courses where reasoning errors are well-characterized —
-who want formative, actionable insight into what their class collectively
-misunderstands, rather than just a spreadsheet of scores.
+Automated grading tells an instructor *whether* an open-ended answer is
+correct, but rarely *which* misconception produced the error. Misconceptor
+classifies student answers about **recursion** and **Big-O / algorithmic
+complexity analysis** into a specific misconception category drawn from
+published CS misconception literature, or into "no misconception" or
+"insufficient evidence". The project tests one mechanism claim:
+**critic-driven, insufficiency-triggered re-retrieval improves
+specific-misconception classification beyond a single-pass prompt that already
+includes the taxonomy and few-shot examples.** We test this against an ablation
+ladder: a keyword baseline, a direct LLM, course-material RAG, single-pass
+taxonomy grounding, the critic loop, and a self-consistency baseline matched on
+token budget, so a win from extra compute is not mistaken for a win from the
+mechanism. Evaluation uses a small, human-annotated subset that we are
+building. The source dataset (JorGPT) has scores and feedback but no
+misconception labels. We report macro-F1 with bootstrap confidence intervals,
+plus a human-rated measure of whether cited evidence actually supports each
+diagnosis. A null result, where the critic loop does not beat the single-pass
+or self-consistency baselines, is a possible and reportable outcome.
 
-## Repository Structure (planned)
+## Documents
+
+- [docs/PROJECT_PROPOSAL.md](docs/PROJECT_PROPOSAL.md): proposal, with changes after feedback
+- [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md): internal research plan (mechanism, baselines, controls)
+- [docs/LITERATURE_SURVEY.md](docs/LITERATURE_SURVEY.md): literature survey (five areas)
+- [docs/AI_NOVELTY_AUDIT.md](docs/AI_NOVELTY_AUDIT.md): novelty & feasibility audit, with post-feedback addendum
+
+## Repository Structure (current)
 
 ```
-/docs
-  LITERATURE_SURVEY.md
+docs/
   PROJECT_PROPOSAL.md
+  RESEARCH_PLAN.md
+  LITERATURE_SURVEY.md
   AI_NOVELTY_AUDIT.md
-/data
-  (JorGPT dataset subset + misconception annotations)
-/src
-  planner/
-  executor/
-  critic/
-  rag/
-  dashboard/
-/eval
-  test_cases.jsonl   # 50+ labeled diagnostic cases
-  results/
+data/
+  raw/            # JorGPT CSVs (dataset_en.csv, dataset_es.csv), gitignored, never committed
+.gitignore
+README.md
 ```
+
+TODO: update this block once the scaffold (taxonomy/, annotation/, src/,
+configs/, results/, notebooks/, scripts/) is added.
