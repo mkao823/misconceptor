@@ -1,0 +1,18 @@
+# Raw datasets known to the pilot scripts. Paths are globs relative to data/raw/.
+# question_id: either a column name, or {column, regex} where the regex's first
+# group extracts the question ID from that column.
+
+jorgpt:
+  files: "dataset_*.csv"            # EN + ES; ES holds the original question text
+  question_id: question_id
+  question_text: question_text
+  scan_fields: [question_text, ideal_answer]
+  source: "JorGPT, Data 2026 11(3) 59, doi:10.3390/data11030059"
+
+mohler:
+  files: "mohler/cleaned-oe-*.parquet"
+  question_id: {column: id, regex: '^(E\d+\.Q\d+)'}   # id = E01.Q01.A00
+  question_text: question
+  scan_fields: [question, instructor_answer]
+  strip_tokens: ["<STOP>"]
+  source: "Mohler, Bunescu & Mihalcea 2011 (UNT data structures course); HF nkazi/MohlerASAG, cleaned/open_ended, CC-BY-4.0"

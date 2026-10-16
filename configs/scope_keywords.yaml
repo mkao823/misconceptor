@@ -1,0 +1,77 @@
+# First-pass keyword filter for scripts/filter_scope.py. Review by hand.
+# Matching is case-insensitive. `terms` match as whole words/phrases;
+# `patterns` are raw regular expressions. English and Spanish are both
+# listed because the Spanish file holds the original question text.
+
+# Which text fields are scanned is set per dataset in configs/datasets.yaml.
+# 2026-10-15: added divide-and-conquer, best-case/average-case, and the
+# "how many steps/comparisons", "number of operations" phrases after seeing
+# Mohler's question wording. Review these for false positives.
+
+concepts:
+  recursion:
+    terms:
+      - recursion
+      - recursive
+      - recursively
+      - base case
+      - recursive case
+      - recurrence
+      - recurrence relation
+      - call stack
+      - stack overflow
+      - divide and conquer
+      - divide-and-conquer
+      - recursión
+      - recursivo
+      - recursiva
+      - recursividad
+      - caso base
+      - caso recursivo
+      - pila de llamadas
+    patterns: []
+
+  big_o:
+    terms:
+      - big-o
+      - big o
+      - time complexity
+      - space complexity
+      - algorithmic complexity
+      - computational complexity
+      - asymptotic
+      - complexity analysis
+      - running time
+      - worst case
+      - worst-case
+      - best case
+      - best-case
+      - average case
+      - average-case
+      - number of operations
+      - how many steps
+      - how many comparisons
+      - order of growth
+      - constant time
+      - logarithmic
+      - quadratic
+      - linear time
+      - polynomial time
+      - exponential time
+      - master theorem
+      - complejidad temporal
+      - complejidad espacial
+      - complejidad algorítmica
+      - complejidad computacional
+      - notación o
+      - notación asintótica
+      - peor caso
+      - mejor caso
+      - caso promedio
+      - tiempo lineal
+      - logarítmico
+      - logarítmica
+      - cuadrático
+      - cuadrática
+    patterns:
+      - '\b[OΘΩ]\s*\(\s*(1|n|log|n\s*\^|n\s*log|2\s*\^)'   # O(n), O(log n), O(n^2), Θ(1), ...

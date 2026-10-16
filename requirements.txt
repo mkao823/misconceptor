@@ -3,3 +3,4 @@ numpy
 pyyaml
 scikit-learn
 # TODO: add the LLM provider SDK(s) once the models in configs/models.yaml are chosen.
+pyarrow

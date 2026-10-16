@@ -118,6 +118,25 @@ an important thing to know before claiming diagnostic capability.
 4. Only after this pilot succeeds, scale annotation to the full 50+ case
    eval set and build out conditions 0–4b.
 
+### Pilot result, steps 1–2 (2026-10-15)
+
+- **JorGPT: 0 of 50 questions are in scope (0 of 3,041 responses).** All 50
+  are software-engineering topics (TDD, Docker, Spring/JPA, Vaadin, GitFlow).
+  Data issue: the English `question_text` often holds answer-like text; the
+  Spanish file has the real questions.
+- **Fallback found: Mohler ASAG** (UNT data structures course, CC-BY-4.0,
+  `data/raw/mohler/`). The filter flags 11 of 81 questions (314 responses). On
+  manual review, 5 are strong fits (139 responses: E03.Q06, E05.Q04, E05.Q03,
+  E10.Q07, E12.Q10) and 2 are medium (E03.Q07, E11.Q09). Only 40 flagged
+  answers score below 3/5 (90 below 4/5). The answers are short and the
+  questions are mostly recall.
+- **Implications.** The misconception-bearing pool is small, so: (a) step 3
+  (hand-labeling 10–15 cases) can run on Mohler now; (b) a 50+ case eval with
+  per-class F1 will likely need self-collected answers too; (c) Mohler is old
+  and public, so treat LLM contamination as a confound. One mitigation: compare
+  results on Mohler with results on self-collected answers.
+- Details: docs/PROJECT_PROPOSAL.md (Data), data/processed/scope_report.md.
+
 ## Metrics (added after feedback)
 
 - Macro-F1 per condition with 95% bootstrap CIs, plus paired-bootstrap
