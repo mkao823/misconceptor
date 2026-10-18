@@ -1,0 +1,701 @@
+# Misconception taxonomy for recursion and Big-O (Misconceptor, CMPE 258).
+#
+# Every item comes from published CS-education literature or is explicitly marked
+# provisional. Field reference:
+#   id               stable label used in annotation and model output. Where the source
+#                    has its own tag (Hamouda 2017, ProgMiscon) that tag is the id, verbatim.
+#   concept          recursion | big_o
+#   source           full citation plus URL (YAML anchors reuse one citation across items;
+#                    yaml.safe_load expands them into the full string)
+#   source_locator   where in the source the item is defined
+#   source_wording   the source's own statement of the item, verbatim (omitted when provisional)
+#   description      one or two sentences in our own words
+#   kind             misconception | difficulty | mental_model. Hamouda 2017: a misconception is
+#                    "a mistaken idea or view resulting from a misunderstanding of something";
+#                    a difficulty is "the empirically observed inability to do something".
+#   observable_in    subset of code_tracing | code_writing | conceptual_recall: which kinds of
+#                    student answer can show the item. Mohler's in-scope questions are all
+#                    conceptual_recall, so this field decides which items the eval data can exhibit.
+#   trigger_phrases  3-6 short phrases for the condition-0 keyword baseline, matched
+#                    case-insensitively against the normalized answer text (see annotation/schema.md).
+#                    Expect false positives; this is a floor, not a classifier.
+#   status           verified   = wording checked against the source on 2026-10-18
+#                    provisional = not yet confirmed against the named source; do not cite as published
+#   prevalence_pct   Hamouda items only: percent of students holding the item in the first (ci_v1,
+#                    Table 2) and second (ci_v2, Table 5) CI administrations.
+#   notes            optional free text, including overlap rules between items
+#
+# Loads with yaml.safe_load. Check with: python scripts/validate_taxonomy.py
+
+version: "0.1"
+created: 2026-10-18
+concepts: [recursion, big_o]
+
+sources:
+  hamouda2017: &hamouda2017 >-
+    Hamouda, S., Edwards, S. H., Elmongui, H. G., Ernst, J. V., & Shaffer, C. A. (2017).
+    A basic recursion concept inventory. Computer Science Education, 27(2), 121-148.
+    https://doi.org/10.1080/08993408.2017.1414728
+    (open PDF: https://people.cs.vt.edu/~shaffer/Papers/RecurTutorCIPublished.pdf)
+  progmiscon: &progmiscon >-
+    Chiodini, L., Moreno Santos, I., Gallidabino, A., Tafliovich, A., Santos, A. L., & Hauswirth, M. (2021).
+    A curated inventory of programming language misconceptions. Proceedings of the 2021 ACM Conference on
+    Innovation and Technology in Computer Science Education (ITiCSE '21).
+    https://doi.org/10.1145/3430665.3456343 ; inventory at https://progmiscon.org/misconceptions/
+  gotschi2003: &gotschi2003 >-
+    Götschi, T., Sanders, I., & Galpin, V. (2003). Mental models of recursion. Proceedings of the
+    34th SIGCSE Technical Symposium on Computer Science Education (SIGCSE '03), Reno, NV, pp. 346-350.
+    https://doi.org/10.1145/611892.612004
+    (abstract: https://homepages.inf.ed.ac.uk/vgalpin1/pubs/GSG03.html)
+  bigo_provisional: &bigo_provisional >-
+    Observed in Mohler low scorers; confirm against Farghally et al. SIGCSE 2017:
+    Farghally, M. F., Koh, K. H., Ernst, J. V., & Shaffer, C. A. (2017). Towards a concept inventory
+    for algorithm analysis topics. Proceedings of the 48th ACM Technical Symposium on Computer Science
+    Education (SIGCSE 2017), Seattle, WA, pp. 207-212. https://doi.org/10.1145/3017680.3017756
+
+items:
+
+  # ---------------------------------------------------------------------------
+  # Hamouda et al. 2017, Section 4.2 "list of common misconceptions and difficulties".
+  # Tags are the paper's own, verbatim (including the paper's spelling "Aganist").
+  # ---------------------------------------------------------------------------
+
+  - id: BFneverExecute
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.1 Backward flow, item (1)"
+    source_wording: "Misconception: No statements after the recursive call will execute."
+    description: >-
+      The student believes execution ends at the recursive call, so any statements placed
+      after it never run; in a trace, everything that should happen on the way back out of
+      the recursion is missing.
+    kind: misconception
+    observable_in: [code_tracing]
+    trigger_phrases:
+      - "nothing after the call"
+      - "never gets executed"
+      - "stops at the recursive call"
+      - "never comes back"
+      - "does not return to"
+    status: verified
+    prevalence_pct: {ci_v1: 17.4, ci_v2: 27.93}
+
+  - id: BFexecuteBefore
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.1 Backward flow, item (2)"
+    source_wording: >-
+      Misconception: Statements that come after the recursive call will execute before the
+      recursive call is executed.
+    description: >-
+      The student runs the statements that follow the recursive call first and only then makes
+      the call, so printed output or updates appear in the wrong order relative to the recursion.
+    kind: misconception
+    observable_in: [code_tracing]
+    trigger_phrases:
+      - "executes first"
+      - "before the call"
+      - "then calls itself"
+      - "prints first then"
+      - "runs the rest first"
+    status: verified
+    prevalence_pct: {ci_v1: 13.04, ci_v2: 9.5}
+
+  - id: InfiniteExecution
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.2 Infinite recursion, item (3)"
+    source_wording: >-
+      Misconception: If there is a base case then it will always execute. If the recursive call
+      does not reduce the problem to the base case, then the base case will return, and that will
+      terminate the recursive method.
+    description: >-
+      The student thinks that merely having a base case guarantees termination, even when the
+      recursive call never moves its argument toward that base case.
+    kind: misconception
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases:
+      - "has a base case so it stops"
+      - "will eventually hit the base case"
+      - "as long as there is a base case"
+      - "base case will catch it"
+      - "cannot be infinite"
+    status: verified
+    prevalence_pct: {ci_v1: 4.35, ci_v2: null}
+    notes: >-
+      Closest Hamouda item to Mohler E03.Q06 (causes of infinite recursion). Only present in the
+      first CI administration (Table 2); absent from Tables 4 and 5. An answer that correctly
+      names "missing base case" is NOT evidence of this item; the item is the belief that a
+      present-but-unreachable base case still terminates. See annotation/schema.md.
+
+  - id: RCwrite
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.3 Recursive call, item (4)"
+    source_wording: "Difficulty: Cannot formulate a recursive call that eventually reaches the base case."
+    description: >-
+      When completing or writing a recursive function, the student produces a recursive call
+      whose arguments do not move toward the base case (wrong direction, unchanged, or the wrong
+      parameter altered).
+    kind: difficulty
+    observable_in: [code_writing]
+    trigger_phrases:
+      - "n + 1"
+      - "k + 1"
+      - "same argument"
+      - "calls itself with n"
+      - "does not decrease"
+    status: verified
+    prevalence_pct: {ci_v1: 0, ci_v2: 30}
+    notes: >-
+      A difficulty, so it needs a code-writing attempt. A recall answer that correctly says
+      "the recursive step does not converge" is knowledge, not this difficulty.
+
+  - id: RCnoReturnRequired
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.3 Recursive call, item (5)"
+    source_wording: >-
+      Misconception: A value will be returned from a recursive call even if the return keyword
+      is omitted.
+    description: >-
+      The student assumes the value computed by the recursive case propagates back to the caller
+      automatically, so they omit "return" before the recursive call or predict a value where
+      none is actually returned.
+    kind: misconception
+    observable_in: [code_tracing, code_writing]
+    trigger_phrases:
+      - "no need to return"
+      - "do not need return"
+      - "returns automatically"
+      - "value comes back anyway"
+      - "without a return"
+    status: verified
+    prevalence_pct: {ci_v1: 8.7, ci_v2: 20}
+
+  - id: RCreturnIsRequired
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.3 Recursive call, item (6)"
+    source_wording: >-
+      Misconception: All recursive calls require the return keyword even if the recursive
+      function does not return a value.
+    description: >-
+      The student believes every recursive call must be written with "return", including inside
+      void functions where nothing is returned.
+    kind: misconception
+    observable_in: [code_writing, conceptual_recall]
+    trigger_phrases:
+      - "must return"
+      - "has to have a return"
+      - "every recursive call returns"
+      - "always need a return"
+      - "needs a return statement"
+    status: verified
+    prevalence_pct: {ci_v1: 8.7, ci_v2: 23}
+    notes: "This is the item docs/RESEARCH_PLAN.md earlier called MR1; use this tag instead."
+
+  - id: BCbeforeRecursiveCase
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.4 Base case, item (7)"
+    source_wording: >-
+      Misconception: The base case must appear before the recursive call. The base case must be
+      in the if condition, while the recursive call must be in the else condition or an if else
+      condition. So the student has difficulty recognizing whether the recursive call or the base
+      case is executed when tracing code.
+    description: >-
+      The student treats "if = base case, else = recursive call, base case first" as a fixed
+      template and mis-traces or rejects recursive code that departs from it.
+    kind: misconception
+    observable_in: [code_tracing, code_writing, conceptual_recall]
+    trigger_phrases:
+      - "base case comes first"
+      - "base case must be first"
+      - "base case in the if"
+      - "else is the recursive"
+      - "before the recursive call"
+    status: verified
+    prevalence_pct: {ci_v1: 8.7, ci_v2: 15}
+    notes: >-
+      Overlaps ProgMiscon RecursiveMethodNeedsIfElse. Use this id when ordering ("first") or
+      tracing is involved; use RecursiveMethodNeedsIfElse when the claim is only that an if-else
+      is required.
+
+  - id: BCactionReturnConstant
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.4 Base case, item (8)"
+    source_wording: "Misconception: The base case action must always return a constant, not a variable."
+    description: >-
+      The student believes a base case can only return a literal constant and rejects or
+      mis-traces base cases that return a variable or an expression.
+    kind: misconception
+    observable_in: [code_writing, conceptual_recall]
+    trigger_phrases:
+      - "returns a constant"
+      - "base case returns 0"
+      - "must return 1"
+      - "always returns a number"
+      - "cannot return a variable"
+    status: verified
+    prevalence_pct: {ci_v1: 4.35, ci_v2: 6}
+
+  - id: BCcheckAganistConstant
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.4 Base case, item (9)"
+    source_wording: >-
+      Misconception: The base case condition must always check a variable against a constant,
+      not against another variable.
+    description: >-
+      The student believes the stopping test must compare a parameter with a literal (such as
+      n == 0) and does not recognize a base case that compares two variables.
+    kind: misconception
+    observable_in: [code_writing, conceptual_recall]
+    trigger_phrases:
+      - "n == 0"
+      - "equals zero"
+      - "compare to a constant"
+      - "checks against a number"
+      - "has to be a constant"
+    status: verified
+    prevalence_pct: {ci_v1: 0, ci_v2: 23}
+    notes: "The spelling \"Aganist\" is the paper's own tag and is kept verbatim as the id."
+
+  - id: BCwrite
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.4 Base case, item (10)"
+    source_wording: >-
+      Difficulty: Cannot write a correct base case. The student is given a description for what a
+      function should do, and an incomplete implementation for the function with a missing or
+      incorrect base case. The student has difficulty coming up with a correct base case to
+      complete the implementation.
+    description: >-
+      Asked to complete a recursive function, the student cannot supply a base case with the
+      right condition and the right value.
+    kind: difficulty
+    observable_in: [code_writing, conceptual_recall]
+    trigger_phrases:
+      - "base case is when"
+      - "the base case would be"
+      - "stops when"
+      - "until it is sorted"
+      - "when there is nothing left"
+    status: verified
+    prevalence_pct: {ci_v1: 0, ci_v2: 42}
+    notes: >-
+      Most prevalent item in the second administration (42%). conceptual_recall is included only
+      for the narrow case where a student is asked to state the base case of a named algorithm
+      (Mohler E05.Q04) and states a wrong one; giving a running time instead of a base case is
+      other_error, not BCwrite. See annotation/schema.md.
+
+  - id: BCevaluation
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.4 Base case, item (11)"
+    source_wording: >-
+      Difficulty: Cannot properly evaluate the value for the base case. In nearly all such cases,
+      the student believes that the recursive method executes one more or one less time than it
+      actually does.
+    description: >-
+      When tracing, the student stops one call too early or too late, so the final value or the
+      printed sequence is off by one.
+    kind: difficulty
+    observable_in: [code_tracing]
+    trigger_phrases:
+      - "one more time"
+      - "one less time"
+      - "off by one"
+      - "stops at 1 instead of 0"
+      - "runs n + 1 times"
+    status: verified
+    prevalence_pct: {ci_v1: 21.75, ci_v2: 18}
+
+  - id: GlobalVariable
+    concept: recursion
+    source: *hamouda2017
+    source_locator: "Section 4.2.5 Updating variables, item (12)"
+    source_wording: >-
+      Misconception: Prior to the recursive call, we can (within the recursive function) define a
+      "global" variable that is initialized once and updates when each recursive call is executed.
+    description: >-
+      The student believes a variable declared inside the recursive function is shared by all
+      calls, initialized once and accumulating updates, instead of being re-created in every
+      activation.
+    kind: misconception
+    observable_in: [code_tracing, code_writing]
+    trigger_phrases:
+      - "global variable"
+      - "counter inside the function"
+      - "keeps track across calls"
+      - "accumulates"
+      - "initialized once"
+    status: verified
+    prevalence_pct: {ci_v1: 30.43, ci_v2: 15}
+    notes: >-
+      Same underlying belief as ProgMiscon RecursiveActivationsShareFrame. When both fit, primary
+      is GlobalVariable (the inventory item), secondary RecursiveActivationsShareFrame.
+
+  # ---------------------------------------------------------------------------
+  # ProgMiscon (Chiodini et al. 2021). Ids are the site's names; site_incorrect / site_correct
+  # are the site's "Incorrect" and "Correct" statements verbatim (fetched 2026-10-18).
+  # ---------------------------------------------------------------------------
+
+  - id: BaseCaseNotNeeded
+    concept: recursion
+    source: *progmiscon
+    source_locator: "https://progmiscon.org/misconceptions/Java/BaseCaseNotNeeded/ (Java page marked DRAFT, Observed; Scratch page Not Yet Observed)"
+    site_incorrect: "Recursive computations do not necessarily need a base case"
+    site_correct: "Recursive computations need a base case to terminate"
+    description: >-
+      The student writes or describes a recursive computation with no stopping condition, or
+      treats the base case as optional. The site cautions that students may simply be overwhelmed
+      by recursion and forget the base case rather than actively believe it is unnecessary.
+    kind: misconception
+    observable_in: [code_writing, conceptual_recall]
+    trigger_phrases:
+      - "does not need a base case"
+      - "no base case needed"
+      - "base case is optional"
+      - "just calls itself"
+      - "without a base case"
+    status: verified
+    notes: >-
+      Distinct from InfiniteExecution: there the base case exists but is unreachable and the
+      student expects termination anyway; here the student sees no need for one at all. Do not
+      infer this item from a code paste that merely omits the base case (see schema).
+
+  - id: RecursiveActivationsShareFrame
+    concept: recursion
+    source: *progmiscon
+    source_locator: "https://progmiscon.org/misconceptions/Java/RecursiveActivationsShareFrame/ (Observed)"
+    site_incorrect: "Recursive calls of a method share a stack frame"
+    site_correct: "Each recursive call of a method gets its own stack frame"
+    description: >-
+      The student believes all recursive activations share one set of local variables and
+      parameters, so a local declared in the method behaves as an accumulator across calls.
+    kind: misconception
+    observable_in: [code_tracing, code_writing, conceptual_recall]
+    trigger_phrases:
+      - "same stack frame"
+      - "share the variable"
+      - "same local variable"
+      - "one copy of"
+      - "accumulator across calls"
+    status: verified
+    notes: "See GlobalVariable for the precedence rule."
+
+  - id: RecursiveMethodImpliesRecursiveType
+    concept: recursion
+    source: *progmiscon
+    source_locator: "https://progmiscon.org/misconceptions/Java/RecursiveMethodImpliesRecursiveType/ (Observed)"
+    site_incorrect: "A class with a recursive method represents part of a recursive data structure"
+    site_correct: "A class having a recursive method does not imply that it is part of a recursive data structure"
+    description: >-
+      The student conflates recursive computation with recursive data: any class that contains a
+      recursive method is assumed to be a node of a recursive structure such as a list or tree.
+    kind: misconception
+    observable_in: [conceptual_recall, code_writing]
+    trigger_phrases:
+      - "recursive data structure"
+      - "recursive class"
+      - "must be a linked list"
+      - "node class"
+      - "recursive type"
+    status: verified
+
+  - id: RecursiveMethodNeedsIfElse
+    concept: recursion
+    source: *progmiscon
+    source_locator: "https://progmiscon.org/misconceptions/Java/RecursiveMethodNeedsIfElse/ (Observed)"
+    site_incorrect: "A recursive method needs to contain an if-else statement"
+    site_correct: "A recursive method does not necessarily need to contain an if-else statement"
+    description: >-
+      The student believes the split between base case and recursive case must be written as an
+      if with an else branch, and rejects single-branch ifs, conditional expressions, or
+      polymorphic dispatch as valid ways to express a base case.
+    kind: misconception
+    observable_in: [code_writing, conceptual_recall]
+    trigger_phrases:
+      - "if else"
+      - "needs an else"
+      - "must have an if-else"
+      - "if statement and an else"
+      - "else branch"
+    status: verified
+    notes: >-
+      Language-agnostic default for this project. RecursiveFunctionNeedsIfElse is the Python
+      twin of the same entry; never apply both to one answer.
+
+  - id: RecursiveFunctionNeedsIfElse
+    concept: recursion
+    source: *progmiscon
+    source_locator: "https://progmiscon.org/misconceptions/Python/RecursiveFunctionNeedsIfElse/ (Observed)"
+    site_incorrect: "A recursive function needs to contain an if-else statement"
+    site_correct: "A recursive function does not necessarily need to contain an if-else statement"
+    description: >-
+      Python-language variant of RecursiveMethodNeedsIfElse: the student believes a recursive
+      function must contain an if-else statement, although a single-branch if or a polymorphic
+      call can carry the base case.
+    kind: misconception
+    observable_in: [code_writing, conceptual_recall]
+    trigger_phrases:
+      - "if else"
+      - "needs an else"
+      - "must have an if-else"
+      - "if and else"
+      - "else branch"
+    status: verified
+    notes: >-
+      Use only when the answer is explicitly about Python functions; otherwise label
+      RecursiveMethodNeedsIfElse. Kept so the label set covers all five ProgMiscon recursion entries.
+
+  # ---------------------------------------------------------------------------
+  # Götschi, Sanders & Galpin 2003: mental models of recursion. These are whole-model
+  # categories, not item-level misconceptions, and are the natural labels for conceptual
+  # answers. The category list (copies, looping, active, step, magic, return-value, odd) is
+  # verified from the published abstract; the per-model descriptions below are our paraphrase
+  # of the paper and of Kahney 1983 and were not re-checked against the full text today,
+  # hence status: provisional.
+  # ---------------------------------------------------------------------------
+
+  - id: MMcopies
+    concept: recursion
+    source: *gotschi2003
+    source_locator: "copies model (the viable model; also Kahney 1983)"
+    description: >-
+      Each recursive call is understood as a fresh copy of the function with its own data,
+      calls nest until the base case, and results flow back as each copy finishes. This is the
+      viable model; a correct answer is labelled none, not MMcopies.
+    kind: mental_model
+    viable: true
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases:
+      - "new copy"
+      - "its own copy"
+      - "each call has its own"
+      - "stack frame"
+      - "unwinds"
+    status: provisional
+    notes: "Never a primary label for an incorrect answer. May be used as a secondary label to record a viable model."
+
+  - id: MMlooping
+    concept: recursion
+    source: *gotschi2003
+    source_locator: "looping model (non-viable; Kahney 1983's loop model)"
+    description: >-
+      Recursion is understood as a loop: the recursive call jumps back to the top of the
+      function, locals are reused, and nothing is done on the way back once the stopping
+      condition is met.
+    kind: mental_model
+    viable: false
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases:
+      - "like a loop"
+      - "loops back"
+      - "goes back to the beginning"
+      - "repeats until"
+      - "it is a loop"
+    status: provisional
+    notes: >-
+      Treat a statement that recursion and iteration both repeat and both terminate (Mohler
+      E03.Q07) as correct, not as MMlooping; the model needs evidence that the student thinks the
+      call itself is a jump back with shared state.
+
+  - id: MMactive
+    concept: recursion
+    source: *gotschi2003
+    source_locator: "active model (non-viable)"
+    description: >-
+      The student follows the active flow (calls going down to the base case) but not the passive
+      flow (values coming back), so work that happens after the recursive call is dropped and the
+      base case's value is often taken as the final answer.
+    kind: mental_model
+    viable: false
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases:
+      - "once it reaches the base case"
+      - "base case returns the answer"
+      - "then it stops"
+      - "the answer is the base case"
+      - "until it hits the base case"
+    status: provisional
+    notes: "Item-level counterpart: BFneverExecute."
+
+  - id: MMstep
+    concept: recursion
+    source: *gotschi2003
+    source_locator: "step model (non-viable)"
+    description: >-
+      The student evaluates the recursive call as a single ordinary call that is executed once
+      and then stops, instead of continuing the recursion down to the base case.
+    kind: mental_model
+    viable: false
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases:
+      - "calls itself once"
+      - "one step"
+      - "only calls once"
+      - "just one more call"
+      - "single call"
+    status: provisional
+
+  - id: MMmagic
+    concept: recursion
+    source: *gotschi2003
+    source_locator: "magic model (non-viable)"
+    description: >-
+      The student knows what the function is supposed to compute and writes down that answer
+      without tracing, treating the recursive call as a black box that just produces the result.
+    kind: mental_model
+    viable: false
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases:
+      - "it just works"
+      - "somehow"
+      - "the function knows"
+      - "magically"
+      - "gives the answer"
+    status: provisional
+
+  - id: MMreturnValue
+    concept: recursion
+    source: *gotschi2003
+    source_locator: "return-value model (non-viable)"
+    description: >-
+      The student misunderstands which value a recursive call returns and to whom, for example
+      believing the base case returns straight to the original caller or that the call returns
+      its parameter, so the chain of returns is collapsed or misrouted.
+    kind: mental_model
+    viable: false
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases:
+      - "returns to main"
+      - "returns the parameter"
+      - "goes straight back"
+      - "returns n"
+      - "the return value is"
+    status: provisional
+    notes: "Item-level counterparts: RCnoReturnRequired, RCreturnIsRequired."
+
+  - id: MModd
+    concept: recursion
+    source: *gotschi2003
+    source_locator: "odd models (residual category of non-viable models)"
+    description: >-
+      Residual category for traces or explanations that are internally inconsistent or follow a
+      pattern not covered by the named models.
+    kind: mental_model
+    viable: false
+    observable_in: [code_tracing, conceptual_recall]
+    trigger_phrases: []
+    no_trigger_phrases_reason: >-
+      Residual category with no linguistic signature; the keyword baseline should never predict it.
+    status: provisional
+    notes: >-
+      For conceptual answers prefer other_error unless the answer clearly shows a mechanism
+      model of recursion that is wrong but not one of the named ones.
+
+  # ---------------------------------------------------------------------------
+  # Big-O candidates. Observed in Mohler low scorers (docs/REVIEW_2026-10-18.md, section 2.4);
+  # names and wording are ours until confirmed against Farghally et al. 2017 (and Tilanterä &
+  # Korhonen 2026). Ids use the prefix BO to parallel Hamouda's BF/RC/BC.
+  # ---------------------------------------------------------------------------
+
+  - id: BOsearchLinearScan
+    concept: big_o
+    source: *bigo_provisional
+    source_locator: "Mohler E10.Q07, E12.Q10 answers such as n, n-1, n/2, (n-1)/2"
+    description: >-
+      The student estimates the cost of searching a binary search tree as proportional to the
+      number of nodes (n, n-1, n/2), as if the tree were scanned like an unsorted array or list,
+      instead of proportional to its height.
+    kind: misconception
+    observable_in: [conceptual_recall]
+    trigger_phrases:
+      - "n/2"
+      - "n divided by 2"
+      - "n minus 1"
+      - "n-1"
+      - "half the nodes"
+      - "every node"
+    status: provisional
+
+  - id: BOsearchVsSort
+    concept: big_o
+    source: *bigo_provisional
+    source_locator: "Mohler E10.Q07 answers such as nlog(n), O(nlog(n))"
+    description: >-
+      The student gives a sorting-style bound such as n log n for the cost of a single search,
+      transferring a memorized running time from sorting to searching.
+    kind: misconception
+    observable_in: [conceptual_recall]
+    trigger_phrases:
+      - "n log n"
+      - "nlogn"
+      - "nlog (n)"
+      - "n multiplied by log"
+      - "log n times n"
+    status: provisional
+    notes: >-
+      Applies to search questions only. "O(n log n)" given for the merge-sort base-case question
+      (E05.Q04) is other_error (a running time offered in place of a base case), not this item.
+
+  - id: BObestCaseSmallestInput
+    concept: big_o
+    source: *bigo_provisional
+    source_locator: "Mohler E05.Q03 answers such as '1 operation', 'a list of two ints', 'only one item'"
+    description: >-
+      The student reads "best case" as the smallest or most trivial input (one or two elements,
+      one operation) rather than as the most favorable arrangement of an input of size n
+      (an already sorted array for insertion sort).
+    kind: misconception
+    observable_in: [conceptual_recall]
+    trigger_phrases:
+      - "1 operation"
+      - "one operation"
+      - "one element"
+      - "two elements"
+      - "only one item"
+      - "list of two"
+    status: provisional
+
+  - id: BObestWorstSwapped
+    concept: big_o
+    source: *bigo_provisional
+    source_locator: "Mohler E05.Q03 answers such as 'best case n(n-1)/2', 'worst case O(n), best case O(n^2)'"
+    description: >-
+      The student assigns the worst-case bound to the best case or vice versa, for example n^2 or
+      n(n-1)/2 for insertion sort's best case and n for its worst.
+    kind: misconception
+    observable_in: [conceptual_recall]
+    trigger_phrases:
+      - "n to the power of 2"
+      - "n^2"
+      - "n squared"
+      - "n (n minus 1) divided by 2"
+      - "best case is n^2"
+      - "worst case is n"
+    status: provisional
+
+# -----------------------------------------------------------------------------
+# Labels that are not taxonomy items. Together with every item id above they form the
+# closed label set used in annotation/schema.md and in model output.
+# -----------------------------------------------------------------------------
+special_labels:
+  - id: none
+    definition: >-
+      The answer is correct or acceptable for the question as asked: it agrees with the
+      instructor answer in substance and contains no incorrect claim. It may be incomplete.
+      No evidence span is required.
+  - id: other_error
+    definition: >-
+      The answer is wrong, off-topic, or answers a different question, and the error does not
+      match any catalogued item. Record what the error is in annotator_notes; the pilot counts
+      these to decide whether the taxonomy needs new items.
+  - id: insufficient_evidence
+    definition: >-
+      The answer is too short, vague, garbled, or blank to judge whether a misconception is
+      present (for example "not answered", or a restatement of the question).
