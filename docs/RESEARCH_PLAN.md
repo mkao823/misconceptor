@@ -21,17 +21,28 @@ systematic review, which explicitly flags recursion and "basic algorithm
 analysis" — categories C1/C2 — as well-represented). This gives us an
 external, peer-reviewed taxonomy instead of one we invent ourselves.
 
-Example taxonomy entries we can draw on directly: `MR1 = "Recursive call
-requires a return"` (recursion), plus the C1/C2 complexity-analysis items
-from the same catalog. Exact item list to be pulled from the source paper
-before annotation begins.
+Example taxonomy entries we can draw on directly: `RCreturnIsRequired`
+("all recursive calls require the `return` keyword even if the recursive
+function does not return a value"; Hamouda et al. 2017, item 6 of twelve),
+plus the C1/C2 complexity-analysis items from the DSA systematic review.
+Exact item list to be pulled from the source papers before annotation
+begins.
 
-> **TODO: verify (added 2026-10-15).** The "92-item" count, the C1/C2 category
-> codes, and the `MR1` item ID/wording above are not yet confirmed against the
-> source papers. A web search did not locate the DSA systematic review. The
-> recursion inventory was found: Hamouda et al., *Computer Science Education*
-> 2017, doi:10.1080/08993408.2017.1414728. Do not use these codes in the
-> taxonomy file until they are checked. See docs/LITERATURE_SURVEY.md, Area 2.
+> **Verification status (updated 2026-10-18; replaces the 2026-10-15 TODO).**
+> The DSA systematic review has been located: Tilanterä & Korhonen, "Data
+> structures and algorithms misconceptions in concept inventories: a
+> systematic literature review," *Computer Science Education*, 2026,
+> doi:10.1080/08993408.2026.2633989 (title, authors and venue confirmed via
+> Crossref; the "92-item" count rests on search snippets). The recursion
+> inventory's item list has been read from the full text of Hamouda et al.,
+> *Computer Science Education* 2017, doi:10.1080/08993408.2017.1414728, so
+> its twelve tags (e.g. `RCreturnIsRequired`) are safe to use; the earlier
+> `MR1` code was invented and has been removed. **Still unverified:** the
+> C1/C2 category codes and the per-category counts, pending the Tilanterä &
+> Korhonen PDF (the publisher page blocks automated fetch; get it through the
+> SJSU library). Do not use C1/C2 in the taxonomy file until then. See
+> docs/LITERATURE_SURVEY.md, Area 2, and docs/REVIEW_2026-10-18.md, sections
+> 3.1 and 3.2.
 
 ## The actual mechanism claim (not "we built an agentic system")
 
