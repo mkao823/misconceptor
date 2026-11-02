@@ -23,3 +23,14 @@ baselines:
 
 eval:
 	@echo "TODO: not implemented yet (after the feasibility pilot and annotation)"
+
+.PHONY: annotation-check annotation-report test
+annotation-check:
+	$(PYTHON) scripts/validate_taxonomy.py
+	$(PYTHON) scripts/annotation_sheet.py
+
+annotation-report:
+	$(PYTHON) scripts/annotation_sheet.py --report
+
+test:
+	$(PYTHON) -m unittest discover -s tests -v

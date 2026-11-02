@@ -1,4 +1,4 @@
-# Annotation schema (v0.1, 2026-10-18)
+# Annotation schema (v0.2, 2026-11-01)
 
 How to label a student answer in `annotation/pilot_sheet.csv` against
 `taxonomy/recursion_bigO.yaml`. The pilot's purpose (docs/REVIEW_2026-10-18.md,
@@ -33,7 +33,7 @@ that does not exist, use `other_error` and describe the candidate item in
 | Hamouda 2017, infinite recursion | `InfiniteExecution` | Weakly, E03.Q06 only |
 | Hamouda 2017, recursive call | `RCwrite`, `RCnoReturnRequired`, `RCreturnIsRequired` | `RCreturnIsRequired` if stated; others need code |
 | Hamouda 2017, base case | `BCbeforeRecursiveCase`, `BCactionReturnConstant`, `BCcheckAganistConstant`, `BCwrite`, `BCevaluation` | If the student states the belief; `BCwrite` narrowly on E05.Q04 |
-| Hamouda 2017, updating variables | `GlobalVariable` | Only if stated |
+| Hamouda 2017, updating variables | `GlobalVariable` | No (taxonomy requires code tracing or writing); explicit shared-frame recall claims may fit `RecursiveActivationsShareFrame` |
 | ProgMiscon | `BaseCaseNotNeeded`, `RecursiveActivationsShareFrame`, `RecursiveMethodImpliesRecursiveType`, `RecursiveMethodNeedsIfElse`, `RecursiveFunctionNeedsIfElse` | If stated |
 | Götschi et al. 2003 mental models | `MMcopies` (viable), `MMlooping`, `MMactive`, `MMstep`, `MMmagic`, `MMreturnValue`, `MModd` | Yes, when the answer describes how recursion runs |
 | Big-O (provisional) | `BOsearchLinearScan`, `BOsearchVsSort`, `BObestCaseSmallestInput`, `BObestWorstSwapped` | Yes; E05.Q03, E10.Q07, E12.Q10 |
@@ -50,9 +50,9 @@ Definitions of the special labels (from the taxonomy file):
 | Column | Rule |
 |---|---|
 | `primary_label` | Exactly one label from the set. Never empty once the row is done. |
-| `secondary_label` | Optional. One further label when the answer clearly exhibits a second item, or a mental-model id that explains the primary item-level label. Never `none` or `insufficient_evidence`. Leave empty if in doubt. |
-| `evidence_span` | Required whenever `primary_label` is a taxonomy id. Optional but encouraged for `other_error`. Empty for `none` and `insufficient_evidence`. |
-| `annotator_notes` | Free text: why, what the error is for `other_error`, candidate new items, low confidence, anything a second rater should see after the fact. |
+| `secondary_label` | Optional. One further label when the answer clearly exhibits a second item, or a mental-model id that explains the primary item-level label. Never `none` or `insufficient_evidence`, never the primary id again. With primary `none`, only `MMcopies` is allowed; with `insufficient_evidence`, leave secondary empty. Leave empty if in doubt. |
+| `evidence_span` | Required whenever either label is a taxonomy id, including secondary `MMcopies`. Use spans supporting both labels (one shared span is allowed). Optional but encouraged for `other_error`. Otherwise empty for `none` and `insufficient_evidence`. |
+| `annotator_notes` | Required explanation when either label is `other_error`; otherwise free text. Record candidate new items on separate lines as `Candidate: short description` for counting; use consistent descriptions. Include low confidence and anything a second rater should see after the fact. |
 
 ## 4. Core rules
 
@@ -62,33 +62,33 @@ Definitions of the special labels (from the taxonomy file):
 2. **Evidence span is a verbatim substring** of the `student_answer` cell: copy
    and paste, no paraphrase, no ellipsis, no added quotes. The shortest span that
    carries the claim. If two separate spans are needed, join them with ` || `.
+   The `||` separator may have surrounding whitespace; empty parts are invalid. Each part is checked case-sensitively without normalizing the answer. Evidence is required for secondary taxonomy labels too; humans must check that it supports each label, not merely that it exists.
    An automatic check will test `evidence_span in student_answer` for each part;
    a failing span invalidates the row.
 3. **Label what the text says, not what it omits.** An answer that is correct but
    incomplete is `none` (add "incomplete" to notes). Do not infer a misconception
    from a missing element.
 4. **The grade is not the label.** `score_avg` measures rubric match, not
-   misconceptions. A 5.0 answer can carry a misconception in an aside; a 2.0
+   misconceptions. A 5.0 answer can carry a misconception in an aside (explicit incorrect asides count; record an uncatalogued wrong claim as `other_error`); a 2.0
    answer can be `none` if it was penalized for incompleteness. Decide from the
    text, then look at the score only to catch misreadings.
 5. **Difficulties need an attempt.** `RCwrite`, `BCwrite` and `BCevaluation` are
    observed inabilities to write or trace code. A recall answer cannot show them,
    with one exception: an answer to E05.Q04 that attempts to state merge sort's
-   base case and gets it wrong may be `BCwrite`.
+   base case and gets it wrong may be `BCwrite`. For this recall pilot, labels in either column must include `conceptual_recall` in taxonomy `observable_in`; `BCwrite` is restricted to E05.Q04. In particular, do not use `GlobalVariable` here: its precedence rule in section 6 applies to code tasks, not this pilot.
 6. **Answered a different question** (gives a running time when asked for a base
-   case, describes a procedure when asked for a count) is `other_error` unless the
+   case, gives an incorrect procedure when asked for a count) is `other_error` unless the
    wrong answer itself matches a Big-O item on a *search or best-case* question.
+   A correct procedure with no cost claim is `insufficient_evidence` on a count question: there is no relevant claim to judge. Correct but incomplete claims that do address the requested quantity remain `none`.
 7. **`insufficient_evidence` is for unjudgeable text**, not for short correct or
    short wrong answers. "n/2" is short and judgeable; "not answered" is not.
-8. **`MMcopies` is never the primary label of a wrong answer.** Correct
+8. **`MMcopies` is secondary only, never primary.** Correct
    mechanism descriptions are `none`.
 9. **Provisional Big-O items are used exactly like verified ones** during the
    pilot; the pilot is how they get confirmed or dropped. Note any answer that
    fits a Big-O item only loosely.
 10. **Do not look at model outputs** (conditions 0 to 4) before labelling, and do
-    not revise labels after seeing them. Pre-labelling with a model from another
-    family (review section 6.9) is allowed only if it is done before this pass and
-    recorded.
+    not revise labels after seeing them. For this human pilot, do not pre-label with a model. The review’s optional acceleration proposal is deferred; model-generated labels are never gold.
 
 ## 5. Decision rules for confusions seen in the data
 
@@ -121,7 +121,7 @@ labels: apply them row by row and record exceptions in notes.
 |---|---|---|
 | "1 operation", "best case 1", "1 where there is a list of two ints", "having only one item would be the easiest to sort" | `BObestCaseSmallestInput` | Even when the answer also says "already sorted": the count 1 shows the smallest-input reading. Note the extra correct part. |
 | "best case n(n-1)/2", "best case O(n^2)", "worst case O(n) best case O(n^2)" | `BObestWorstSwapped` | If the same answer also states the correct best case elsewhere, keep `BObestWorstSwapped` and note "self-contradictory". |
-| "Best case N, worst case N factorial" or any answer whose best-case claim is right but whose extra worst-case claim is wrong | `none` | The question asks for the best case. Put the wrong extra claim in notes; it is a wrong fact, not a catalogued item. |
+| "Best case N, worst case N factorial" or any answer whose best-case claim is right but whose extra worst-case claim is wrong | `other_error` | The explicit incorrect aside prevents `none`; record it in notes. If an aside itself directly matches a taxonomy item, use that item instead. |
 | "best case N (sorted)" with or without the scenario | `none` | Missing scenario is incompleteness, not error. |
 
 ### E03.Q07, similarities between iteration and recursion
@@ -147,7 +147,7 @@ labels: apply them row by row and record exceptions in notes.
 | Answer pattern | Primary | Notes |
 |---|---|---|
 | Split into files, classes, functions, "easily managed functions" (modular decomposition) | `other_error` | Candidate new item: "divide-and-conquer confused with modular decomposition". |
-| Describes merge sort specifically (split in half, sort halves, combine) instead of the paradigm | `none` | Note "instance instead of paradigm". If the combine step is wrong ("sort them back together") still `none` with a note; it is imprecision. |
+| Describes merge sort specifically (split in half, sort halves, combine) instead of the paradigm | `none` | Note "instance instead of paradigm". Loose wording ("sort them back together") can be `none` with an imprecision note; an explicit incorrect combine claim is `other_error` unless a taxonomy item fits. |
 | Divide, solve subproblems (recursively), combine | `none` | |
 
 ## 6. Precedence between overlapping taxonomy ids
@@ -172,9 +172,48 @@ labels: apply them row by row and record exceptions in notes.
 
 1. Count of rows per primary label, and `other_error` as a share of the 43 low scorers. If more than half of the low scorers are `other_error`, the Mohler-only plan is dead and the supplement (review section 6.3) becomes mandatory.
 2. The list of candidate new items collected in `annotator_notes` (section 5 names four), with counts.
-3. Which taxonomy ids received zero labels. Those are reported as "not observable in this data" and excluded from per-class F1, not silently averaged in.
+3. Which taxonomy ids received zero labels. Report them as "zero observed primary labels", not as proven unobservable. Review task affordances and secondary counts before concluding an item is not observable. Exclude unsupported classes from per-class F1 with explicit disclosure, not silent averaging.
 4. Rows labelled with a provisional Big-O id, so they can be re-checked once Farghally et al. 2017 is read.
 
 ## 9. Versioning
 
 Bump the version in the heading and note the change whenever a rule in section 4 to 6 changes. Labels produced under an older version are re-checked against the new rule before being used as gold.
+
+
+### v0.2 change record (2026-11-01)
+
+Conservative resolutions before any human labels exist:
+
+- The v0.1 insertion-sort wrong-aside example contradicted `none`'s definition
+  and rule 4. Keep the stricter definition: explicit wrong asides count as errors;
+  the example now uses `other_error`. Loose wording in the divide-and-conquer
+  example remains imprecision only; an explicit wrong combine claim is an error.
+- The procedure-only BST example was more specific than rule 6. Clarify that
+  no relevant cost claim is `insufficient_evidence`; a wrong procedure is
+  `other_error`. Do not infer a cost misconception from omission.
+- The review required evidence for any taxonomy label while the column table
+  covered primary only. Require evidence for either column; primary `none`
+  plus secondary `MMcopies` is the sole exception to empty evidence for `none`.
+  `MMcopies` is secondary only. Disallow duplicate labels and secondary errors
+  beside `none` or any secondary beside `insufficient_evidence`.
+- The v0.1 table allowed recall use of `GlobalVariable` despite its code-only
+  taxonomy metadata. Keep the narrower taxonomy eligibility; the code-task
+  precedence rule does not authorize it for recall.
+- Make `other_error` explanations mandatory, matching the taxonomy definition.
+  Defer the optional model pre-label proposal for this human-only pilot.
+- Zero labels alone cannot prove unobservability; qualify the reporting language.
+
+Re-check older labels under v0.2 before use as gold. There were no labels in the
+63-row sheet at this update. Taxonomy IDs and source verification statuses are
+unchanged (taxonomy version remains 0.1).
+
+### Mechanical completion contract
+
+Keep all 63 rows and all ten columns in the original order of columns. Row order
+may change. Only edit the four annotation columns. `pilot_identity.json` freezes
+SHA256 fingerprints of the original six source cells by id; do not regenerate it
+from your working sheet. Missing, extra, duplicate or changed rows fail validation.
+Partial mode accepts blank labels and notes-only drafts. Once a primary is set,
+all row requirements apply; clear primary/secondary/evidence together to leave a
+notes-only draft. Complete mode additionally requires every primary label.
+Passing validation means structurally complete, not adjudicated human gold.
