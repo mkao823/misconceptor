@@ -2,5 +2,6 @@ pandas
 numpy
 pyyaml
 scikit-learn
-# TODO: add the LLM provider SDK(s) once the models in configs/models.yaml are chosen.
 pyarrow
+openai      # OpenAI-compatible client; used for Ollama (local), OpenAI and Anthropic's compatibility endpoint
+pytest

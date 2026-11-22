@@ -1,20 +1,43 @@
 # Model and API settings. Do NOT put API keys in this file.
 # Each provider names the environment variable its key is read from
-# (see .env.example); src/config.py resolves it at runtime.
+# (see .env.example); src/config.py resolves it at runtime, and src/llm.py
+# talks to every provider through the OpenAI-compatible chat-completions API.
+#
+# Model selection: scripts/run_condition.py --model <provider>/<model> or
+# --model <model>. A bare model name is looked up in the providers' `models`
+# lists; if no provider lists it, `default_provider` is used.
 
-# TODO: choose the base model used for every ablation condition.
-default_model: TODO
+# The base model used for every ablation condition (review section 6.1:
+# local-first, same model for every condition including the Critic).
+default_model: gpt-oss:20b
+default_provider: ollama
 
 providers:
-  # TODO: fill in the providers actually used. These are placeholders.
-  example_provider:
-    api_key_env: EXAMPLE_API_KEY
-    base_url: null        # set for OpenAI-compatible / local endpoints
-    models: []
+  ollama:
+    base_url: http://localhost:11434/v1
+    api_key_env: OLLAMA_API_KEY
+    api_key_required: false        # Ollama ignores the key; any placeholder is accepted
+    models: [gpt-oss:20b, devstral, deepseek-r1:14b]
+    cost_per_1m_tokens: {prompt: 0.0, completion: 0.0}   # local inference
+
+  # openai:
+  #   base_url: https://api.openai.com/v1
+  #   api_key_env: OPENAI_API_KEY
+  #   models: [gpt-4o-mini]
+  #   cost_per_1m_tokens: {prompt: 0.15, completion: 0.60}   # TODO: check current pricing
+
+  # anthropic:                      # OpenAI SDK compatibility layer
+  #   base_url: https://api.anthropic.com/v1/
+  #   api_key_env: ANTHROPIC_API_KEY
+  #   models: [claude-sonnet-5-5]
+  #   cost_per_1m_tokens: {prompt: 3.0, completion: 15.0}    # TODO: check current pricing
 
 generation:
   temperature: 0.0        # single-pass conditions
-  max_output_tokens: 1024
+  seed: 0                 # passed to the API; part of the cache key
+  max_output_tokens: 2048 # gpt-oss spends part of this budget on hidden reasoning
+  json_mode: true         # response_format: {"type": "json_object"}
+  max_repairs: 1          # extra round-trips allowed when the output fails validation
 
 self_consistency:         # condition 4b
   n_samples: TODO         # set so the total token budget matches condition 4
