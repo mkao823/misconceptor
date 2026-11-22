@@ -102,7 +102,7 @@ def report(rows, taxonomy):
             if line.lower().startswith('candidate:') and line[10:].strip():
                 candidates[line[10:].strip()] += 1
     return {
-        'schema_version': '0.2', 'total': len(rows), 'completed': len(done),
+        'schema_version': '0.3', 'total': len(rows), 'completed': len(done),
         'remaining': len(rows) - len(done),
         'primary_counts': {k: primary[k] for k in ids + [i['id'] for i in taxonomy['special_labels']]},
         'secondary_counts': dict(sorted(secondary.items())),

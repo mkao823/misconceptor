@@ -160,7 +160,7 @@ def test_scripted_session_labels_three_rows_and_validates(env):
     log = env.log.read_text().splitlines()
     entries = [line for line in log if line.startswith('- ')]
     assert len(entries) == 1
-    assert 'rater: Test Rater' in entries[0] and 'schema v0.2' in entries[0]
+    assert 'rater: Test Rater' in entries[0] and 'schema v0.3' in entries[0]
     assert f'labeled 3: {", ".join(IDS[:3])}' in entries[0]
     assert re.match(r'- \d{4}-\d\d-\d\d \|', entries[0])
 

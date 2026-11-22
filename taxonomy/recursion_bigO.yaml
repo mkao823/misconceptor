@@ -27,7 +27,7 @@
 #
 # Loads with yaml.safe_load. Check with: python scripts/validate_taxonomy.py
 
-version: "0.1"
+version: "0.2"
 created: 2026-10-18
 concepts: [recursion, big_o]
 
@@ -611,7 +611,8 @@ items:
     description: >-
       The student estimates the cost of searching a binary search tree as proportional to the
       number of nodes (n, n-1, n/2), as if the tree were scanned like an unsorted array or list,
-      instead of proportional to its height.
+      instead of proportional to its height. This includes giving the size of the tree as a
+      formula (2 to the power of the number of levels, 2n-1) for the cost of one search.
     kind: misconception
     observable_in: [conceptual_recall]
     trigger_phrases:
@@ -628,8 +629,9 @@ items:
     source: *bigo_provisional
     source_locator: "Mohler E10.Q07 answers such as nlog(n), O(nlog(n))"
     description: >-
-      The student gives a sorting-style bound such as n log n for the cost of a single search,
-      transferring a memorized running time from sorting to searching.
+      The student gives a sorting-style bound or comparison count, such as n log n or
+      n(n-1)/2, for the cost of a single search, transferring a memorized running time from
+      sorting to searching.
     kind: misconception
     observable_in: [conceptual_recall]
     trigger_phrases:
@@ -648,9 +650,10 @@ items:
     source: *bigo_provisional
     source_locator: "Mohler E05.Q03 answers such as '1 operation', 'a list of two ints', 'only one item'"
     description: >-
-      The student reads "best case" as the smallest or most trivial input (one or two elements,
-      one operation) rather than as the most favorable arrangement of an input of size n
-      (an already sorted array for insertion sort).
+      The student gives a best case that does not grow with n: either by shrinking the input to
+      a trivial size (one or two elements) or by stating a constant count (1 operation, O(1)),
+      rather than the cost of the most favorable arrangement of an input of size n (about n
+      operations on an already sorted array for insertion sort).
     kind: misconception
     observable_in: [conceptual_recall]
     trigger_phrases:

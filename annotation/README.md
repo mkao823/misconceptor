@@ -1,6 +1,6 @@
 # Human annotation pilot
 
-Read [schema v0.2](schema.md) and every taxonomy description and note before
+Read [schema v0.3](schema.md) and every taxonomy description and note before
 labeling. The pilot CSV remains entirely unlabeled. Only humans assign labels;
 validation checks mechanics, not whether evidence actually supports a belief.
 No baselines, model pre-labels, or critic outputs belong in this pass.
@@ -33,7 +33,7 @@ blank annotations and requires the original local parquet.
 ## First session: 14 answers, then pause
 
 1. Make a working copy of the entire CSV and record rater name, date, and schema
-   v0.2 in a local session log. Keep text columns as text in your spreadsheet;
+   v0.3 in a local session log. Keep text columns as text in your spreadsheet;
    preserve exact source values and export UTF-8 CSV. Hide `score_avg` while
    deciding; inspect it afterward only to catch misreadings.
 2. Label these 14 IDs (two per question). They were selected by row identity

@@ -1,4 +1,4 @@
-# Annotation schema (v0.2, 2026-11-01)
+# Annotation schema (v0.3, 2026-11-22)
 
 How to label a student answer in `annotation/pilot_sheet.csv` against
 `taxonomy/recursion_bigO.yaml`. The pilot's purpose (docs/REVIEW_2026-10-18.md,
@@ -80,6 +80,10 @@ Definitions of the special labels (from the taxonomy file):
    case, gives an incorrect procedure when asked for a count) is `other_error` unless the
    wrong answer itself matches a Big-O item on a *search or best-case* question.
    A correct procedure with no cost claim is `insufficient_evidence` on a count question: there is no relevant claim to judge. Correct but incomplete claims that do address the requested quantity remain `none`.
+   **The test (v0.3).** If the answer commits to a specific response of the wrong kind (a running time
+   for a base case, a code-organisation practice for a paradigm), it is `other_error`. If it makes no claim
+   that answers the question (a definition, a restatement, a correct procedure with no count, a blank or
+   garbled answer), it is `insufficient_evidence`.
 7. **`insufficient_evidence` is for unjudgeable text**, not for short correct or
    short wrong answers. "n/2" is short and judgeable; "not answered" is not.
 8. **`MMcopies` is secondary only, never primary.** Correct
@@ -109,9 +113,9 @@ labels: apply them row by row and record exceptions in notes.
 | Answer pattern | Primary | Notes |
 |---|---|---|
 | "n/2", "n divided by 2", "n-1", "(n-1)/2", "n", unqualified "O(n)" | `BOsearchLinearScan` | For unqualified "O(n)" note "could be degenerate-tree worst case" and mark low confidence. |
-| "n log n", "O(nlog(n))", "nLog(n)" | `BOsearchVsSort` | |
+| "n log n", "O(nlog(n))", "nLog(n)", and sorting comparison counts such as "n(n-1)/2" | `BOsearchVsSort` | v0.3: a sorting count given for a search is this item, not a node-count formula. |
 | "log n", "height", "depth", "number of levels", "O(log n) balanced, O(n) degenerate" | `none` | Includes answers that give both best and worst case correctly. |
-| Node-count formulas: "2^n where n is the levels", "(n^k)-1 where k is the height", "2n-1", "n(n-1)/2" | `BOsearchLinearScan` if the formula is the total node count expressed through height (the student equates cost with visiting all nodes); otherwise `other_error` | Note the formula. Candidate new item: "search cost given as a closed-form node count". |
+| Node-count formulas: "2^n where n is the levels", "(n^k)-1 where k is the height", "2n-1" | `BOsearchLinearScan` | v0.3: always this item, because the student gives the size of the tree as the cost of a search. Note the formula and "node-count formula"; mark low confidence when the formula is garbled. Keep the candidate line: "search cost given as a closed-form node count". |
 | Fixed constant: "at most 3 comparisons", "3 steps, there are 3 cases", "2 way key comparison" | `other_error` | Candidate new item: "cost stated as a small constant independent of n" (possibly confusing the number of branches per step with the number of steps). |
 | Describes the search procedure (compare, go left or right) without a count | `insufficient_evidence` | No cost claim to judge. If the description is itself wrong (visits root then whole right subtree then left subtree) use `other_error` and note "traversal confused with search". |
 
@@ -119,7 +123,7 @@ labels: apply them row by row and record exceptions in notes.
 
 | Answer pattern | Primary | Notes |
 |---|---|---|
-| "1 operation", "best case 1", "1 where there is a list of two ints", "having only one item would be the easiest to sort" | `BObestCaseSmallestInput` | Even when the answer also says "already sorted": the count 1 shows the smallest-input reading. Note the extra correct part. |
+| "1 operation", "best case 1", "1 where there is a list of two ints", "having only one item would be the easiest to sort" | `BObestCaseSmallestInput` | v0.3: the item covers any best case that does not grow with n. Add a notes line `Tag: small input` when the answer names a small input (one item, two elements), or `Tag: constant count` when it gives a constant (1 operation, O(1)) without naming one, including answers that also say "already sorted". Note any extra correct part. |
 | "best case n(n-1)/2", "best case O(n^2)", "worst case O(n) best case O(n^2)" | `BObestWorstSwapped` | If the same answer also states the correct best case elsewhere, keep `BObestWorstSwapped` and note "self-contradictory". |
 | "Best case N, worst case N factorial" or any answer whose best-case claim is right but whose extra worst-case claim is wrong | `other_error` | The explicit incorrect aside prevents `none`; record it in notes. If an aside itself directly matches a taxonomy item, use that item instead. |
 | "best case N (sorted)" with or without the scenario | `none` | Missing scenario is incompleteness, not error. |
@@ -171,7 +175,7 @@ labels: apply them row by row and record exceptions in notes.
 ## 8. What the pilot must record
 
 1. Count of rows per primary label, and `other_error` as a share of the 43 low scorers. If more than half of the low scorers are `other_error`, the Mohler-only plan is dead and the supplement (review section 6.3) becomes mandatory.
-2. The list of candidate new items collected in `annotator_notes` (section 5 names four), with counts.
+2. The list of candidate new items collected in `annotator_notes` (section 5 names four), with counts. Candidates are reported as a table of error types found inside `other_error`; they are not added to the label set during the pilot (v0.3).
 3. Which taxonomy ids received zero labels. Report them as "zero observed primary labels", not as proven unobservable. Review task affordances and secondary counts before concluding an item is not observable. Exclude unsupported classes from per-class F1 with explicit disclosure, not silent averaging.
 4. Rows labelled with a provisional Big-O id, so they can be re-checked once Farghally et al. 2017 is read.
 
@@ -179,6 +183,34 @@ labels: apply them row by row and record exceptions in notes.
 
 Bump the version in the heading and note the change whenever a rule in section 4 to 6 changes. Labels produced under an older version are re-checked against the new rule before being used as gold.
 
+
+### v0.3 change record (2026-11-22)
+
+Rule review after the first rater finished all 63 rows. Four decisions, taken by the rater:
+
+- **Answers that miss the question (rule 6).** The labels already followed one test; it is now written
+  down. A specific response of the wrong kind is `other_error`; no claim that answers the question is
+  `insufficient_evidence`. No label changed.
+- **`BObestCaseSmallestInput`.** Three of its five rows give a constant count without naming a small
+  input. The id is kept and the item is redefined as a best case that does not grow with n. Each row
+  carries a notes line `Tag: small input` (E05.Q03.A15, E05.Q03.A25) or `Tag: constant count`
+  (E05.Q03.A04, E05.Q03.A09, E05.Q03.A27). No label changed.
+- **Formula answers on the tree-search questions.** A sorting comparison count such as n(n-1)/2 is
+  `BOsearchVsSort`, and a node-count formula is always `BOsearchLinearScan`. Two rows were relabeled:
+  E12.Q10.A24 from `other_error` to `BOsearchVsSort`, and E10.Q07.A21 from `other_error` to
+  `BOsearchLinearScan` (low confidence, formula garbled).
+- **Candidate items.** Not promoted. They are reported as error types found inside `other_error`,
+  because classes defined from the eval rows cannot fairly be scored on those same rows, and each has
+  two to four rows.
+
+All 63 labels were re-checked against v0.3; only the two rows above changed. Counts after the
+re-check: none 26, other_error 14, BOsearchLinearScan 8, insufficient_evidence 5,
+BObestCaseSmallestInput 5, BOsearchVsSort 3, BObestWorstSwapped 2.
+
+Taxonomy version is now 0.2: the descriptions of `BObestCaseSmallestInput`, `BOsearchVsSort` and
+`BOsearchLinearScan` were reworded to match these rules. Ids, sources, statuses and trigger phrases
+are unchanged, so the keyword baseline is not affected. The reworded descriptions are part of the
+prompt for conditions 3, 4 and 4b alike.
 
 ### v0.2 change record (2026-11-01)
 
