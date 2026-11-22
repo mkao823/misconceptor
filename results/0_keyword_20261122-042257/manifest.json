@@ -1,0 +1,60 @@
+{
+  "condition": 0,
+  "condition_name": "keyword",
+  "timestamp": "2026-11-22T04:22:57-08:00",
+  "git": {
+    "commit": "71aaf9bd541dc5acfade482d67602dd8722395e1",
+    "dirty": true
+  },
+  "sheet": {
+    "path": "annotation/pilot_sheet.csv",
+    "sha256": "b3475aa0c690d7e9cf04eb6598ec4f9d04a16b42faa637c2e151b7f3cd87d6e6",
+    "n_rows_total": 63,
+    "n_rows_run": 63,
+    "limit": null
+  },
+  "taxonomy": {
+    "path": "taxonomy/recursion_bigO.yaml",
+    "version": "0.2",
+    "sha256": "62bba49c188c1eb3d0b8fa9ae6c20ee468acbc108e17cf3af6b9577b885e59fc",
+    "n_labels": 31
+  },
+  "model": "keyword",
+  "provider": null,
+  "transport": "none",
+  "prompt_template": null,
+  "temperature": null,
+  "seed": null,
+  "max_tokens": null,
+  "json_mode": null,
+  "max_repairs": null,
+  "cache_used": null,
+  "retrieval": null,
+  "fewshot": null,
+  "context_window": null,
+  "tokens": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0
+  },
+  "tokens_uncached": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0
+  },
+  "calls": {
+    "uncached": 0,
+    "cached": 0
+  },
+  "tokens_per_row": null,
+  "calls_per_row": null,
+  "per_row": null,
+  "cost": {
+    "usd": null,
+    "note": "placeholder: computed from provider cost_per_1m_tokens when set"
+  },
+  "n_predictions": 63,
+  "n_errors": 0,
+  "wall_seconds": 0.1,
+  "run_id": "0_keyword_20261122-042257"
+}

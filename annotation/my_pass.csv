@@ -46,8 +46,8 @@ E12.Q10.A13,E12.Q10,How many steps does it take to search a node in a binary sea
 E12.Q10.A17,E12.Q10,How many steps does it take to search a node in a binary search tree?,The height of the tree.,"worst case scenario equals the number of levels of the tree, ie: the node at the farthest position from the root node. best case equals 1 step if its the root node.",5.0,none,,,
 E12.Q10.A18,E12.Q10,How many steps does it take to search a node in a binary search tree?,The height of the tree.,3 steps at most. There are 3 cases.,1.5,other_error,,,"fixed constant; counts the three outcomes of one comparison as the number of steps
 Candidate: cost stated as a small constant independent of n"
-E12.Q10.A22,E12.Q10,How many steps does it take to search a node in a binary search tree?,The height of the tree.,"three steps visit the root node, then go to right subtree, after visiting right subtree visit left subtree",2.5,other_error,,,"fixed constant; counts the three outcomes of one comparison as the number of steps
-Candidate: cost stated as a small constant independent of n"
+E12.Q10.A22,E12.Q10,How many steps does it take to search a node in a binary search tree?,The height of the tree.,"three steps visit the root node, then go to right subtree, after visiting right subtree visit left subtree",2.5,other_error,,,"traversal confused with search
+describes visiting the root, then the right subtree, then the left subtree, as three steps"
 E12.Q10.A24,E12.Q10,How many steps does it take to search a node in a binary search tree?,The height of the tree.,(n (n minus 1)) divided by 2,1.5,BOsearchVsSort,,(n (n minus 1)) divided by 2,"formula is the worst-case comparison count of a simple sort, not a node count
 relabeled under schema v0.3: sorting counts go to BOsearchVsSort (was other_error)"
 E12.Q10.A25,E12.Q10,How many steps does it take to search a node in a binary search tree?,The height of the tree.,2n-1,2.5,BOsearchLinearScan,,2n-1,"n not defined; linear in n, or a node-count formula with the exponent possibly lost; low confidence

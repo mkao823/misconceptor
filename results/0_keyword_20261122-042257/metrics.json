@@ -1,0 +1,235 @@
+{
+  "run_id": "0_keyword_20261122-042257",
+  "condition": 0,
+  "condition_name": "keyword",
+  "model": "keyword",
+  "evaluated_at": "2026-11-22T12:22:57+00:00",
+  "gold": {
+    "path": "annotation/gold_provisional.csv",
+    "sha256": "be5782f628edae0fd9b21136d751d710344dfcd3ab37f9e66cf13361aa6beb52",
+    "n_rows": 63,
+    "n_labeled": 63,
+    "n_unlabeled": 0,
+    "invalid_gold_labels": {},
+    "citation_validity": {
+      "n_with_spans": 22,
+      "n_valid": 22,
+      "rate": 1.0,
+      "invalid_rows": []
+    }
+  },
+  "predictions": {
+    "n": 63,
+    "n_errors": 0,
+    "n_cached": 0,
+    "label_distribution": {
+      "none": 41,
+      "BOsearchLinearScan": 8,
+      "BOsearchVsSort": 7,
+      "BObestCaseSmallestInput": 4,
+      "BObestWorstSwapped": 2,
+      "MMstep": 1
+    },
+    "coverage": 1.0,
+    "citation_validity": {
+      "n_records": 63,
+      "n_with_student_spans": 22,
+      "n_valid": 22,
+      "rate": 1.0,
+      "rate_all": 1.0,
+      "retrieved": {
+        "n_with_spans": 0,
+        "n_valid": 0,
+        "rate": null
+      },
+      "taxonomy": {
+        "n_with_spans": 0,
+        "n_valid": 0,
+        "rate": null
+      }
+    }
+  },
+  "gold_available": true,
+  "scores": {
+    "n_scored": 63,
+    "n_missing_predictions": 0,
+    "missing_ids": [],
+    "labels_in_gold": [
+      "none",
+      "other_error",
+      "insufficient_evidence",
+      "BObestWorstSwapped",
+      "BObestCaseSmallestInput",
+      "BOsearchLinearScan",
+      "BOsearchVsSort"
+    ],
+    "macro_f1": 0.4514510779436152,
+    "macro_f1_ci": {
+      "point": 0.4514510779436152,
+      "lower": 0.3117255685504927,
+      "upper": 0.5642166563595136,
+      "mean": 0.44172593673698796,
+      "n_resamples": 2000,
+      "seed": 0,
+      "alpha": 0.05,
+      "n_rows": 63
+    },
+    "accuracy": 0.5873015873015873,
+    "per_class": {
+      "none": {
+        "precision": 0.6097560975609756,
+        "recall": 0.9615384615384616,
+        "f1": 0.7462686567164178,
+        "support": 26,
+        "predicted": 41
+      },
+      "other_error": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 14,
+        "predicted": 0
+      },
+      "insufficient_evidence": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 5,
+        "predicted": 0
+      },
+      "BObestWorstSwapped": {
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "support": 2,
+        "predicted": 2
+      },
+      "BObestCaseSmallestInput": {
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "support": 5,
+        "predicted": 4
+      },
+      "BOsearchLinearScan": {
+        "precision": 0.625,
+        "recall": 0.625,
+        "f1": 0.625,
+        "support": 8,
+        "predicted": 8
+      },
+      "BOsearchVsSort": {
+        "precision": 0.2857142857142857,
+        "recall": 0.6666666666666666,
+        "f1": 0.4,
+        "support": 3,
+        "predicted": 7
+      }
+    },
+    "confusion": {
+      "labels": [
+        "none",
+        "other_error",
+        "insufficient_evidence",
+        "BObestWorstSwapped",
+        "BObestCaseSmallestInput",
+        "BOsearchLinearScan",
+        "BOsearchVsSort",
+        "MMstep"
+      ],
+      "matrix": [
+        [
+          25,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          8,
+          0,
+          0,
+          1,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "coverage": 1.0,
+    "covered_accuracy": 0.5873015873015873,
+    "abstention": {
+      "n_abstained": 0,
+      "n_gold_abstain": 5
+    },
+    "four_way": {
+      "macro_f1": 0.3615671641791045
+    },
+    "macro_f1_excluding_abstain": 0.5266929242675511
+  },
+  "comparison": null
+}
