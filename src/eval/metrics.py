@@ -172,12 +172,38 @@ def covered_accuracy(y_true: Sequence[str], y_pred: Sequence[str], abstain: str 
 
 
 def citation_validity(records: Sequence[dict]) -> dict:
-    """Validity rate over records that cite at least one student_answer span (and over all)."""
-    cited = [r for r in records if any(e.get("source") == "student_answer" for e in r.get("evidence", []))]
-    n_valid = sum(1 for r in cited if r.get("citation_valid"))
-    return {"n_records": len(records), "n_with_student_spans": len(cited), "n_valid": n_valid,
-            "rate": (n_valid / len(cited)) if cited else None,
-            "rate_all": (sum(1 for r in records if r.get("citation_valid")) / len(records)) if records else None}
+    """Citation validity (review 6.4).
+
+    ``n_with_student_spans`` / ``n_valid`` / ``rate`` are over records that cite at least one
+    student_answer span and count a record as valid when all of its *student_answer* spans are
+    verbatim, so the number is comparable across conditions. ``retrieved`` and ``taxonomy``
+    give the same three numbers for spans cited from retrieved chunks and from the taxonomy
+    text, over the records where that source was actually checked (conditions 2 and up, and
+    3 and up). ``rate_all`` is the share of all records with no fabricated span of any
+    checked source.
+    """
+    def cites(r: dict, source: str) -> bool:
+        return any(e.get("source") == source for e in r.get("evidence", []))
+
+    def checked(r: dict, source: str) -> bool:
+        return source in r.get("sources_checked", ["student_answer"])
+
+    def clean(r: dict, source: str) -> bool:
+        by_source = r.get("invalid_by_source")
+        if by_source is None:                 # records written before per-source tracking
+            return bool(r.get("citation_valid"))
+        return not by_source.get(source)
+
+    cited = [r for r in records if cites(r, "student_answer")]
+    n_valid = sum(1 for r in cited if clean(r, "student_answer"))
+    out = {"n_records": len(records), "n_with_student_spans": len(cited), "n_valid": n_valid,
+           "rate": (n_valid / len(cited)) if cited else None,
+           "rate_all": (sum(1 for r in records if r.get("citation_valid")) / len(records)) if records else None}
+    for source in ("retrieved", "taxonomy"):
+        rs = [r for r in records if cites(r, source) and checked(r, source)]
+        ok = sum(1 for r in rs if clean(r, source))
+        out[source] = {"n_with_spans": len(rs), "n_valid": ok, "rate": (ok / len(rs)) if rs else None}
+    return out
 
 
 def cohen_kappa(a: Sequence[str], b: Sequence[str]) -> float:

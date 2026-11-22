@@ -1,0 +1,186 @@
+# Few-shot examples for condition 3 (taxonomy + few-shot), version 1.
+#
+# AUTHORED EXAMPLES. Every question, reference answer and student answer in this file was
+# written from scratch for this prompt. Nothing here is taken or adapted from the Mohler ASAG
+# dataset, from annotation/pilot_sheet.csv, or from a published concept-inventory item, and
+# none of the questions is one of the seven in-scope exam questions (E03.Q06, E03.Q07,
+# E05.Q03, E05.Q04, E10.Q07, E11.Q09, E12.Q10). tests/test_conditions_2_3.py checks the
+# student answers against the pilot sheet and, when the raw parquet is on disk, against
+# every Mohler answer.
+#
+# Rules for editing:
+#   * Never edit this file once a run has used it; copy it to fewshot_v2.yaml instead. The
+#     run manifest records the file name and its SHA-256.
+#   * Keep `provenance: authored` and `authored: true` on every example. The loader
+#     (src/baselines/taxonomy_fewshot.py) refuses the file without them.
+#   * `output` must be a valid record for the example's own student answer: label in the
+#     closed label set, every span copied verbatim from `student_answer`.
+#   * `rationale` is for maintainers and is NOT shown to the model.
+#
+# Coverage: none, other_error, insufficient_evidence, and five taxonomy items, three of them
+# Big-O (BOsearchVsSort, BObestCaseSmallestInput, BOsearchLinearScan) and two recursion
+# (InfiniteExecution, RCreturnIsRequired).
+
+name: fewshot_v1
+version: 1
+provenance: authored
+authored_by: "Claude (Anthropic's AI assistant), for the Misconceptor project"
+authored_on: 2026-11-22
+source_statement: >-
+  Written from scratch for this prompt; not taken or adapted from Mohler ASAG, from
+  annotation/pilot_sheet.csv, or from any published item; no question is one of the seven
+  in-scope exam questions.
+
+examples:
+
+  - id: fs01
+    authored: true
+    concept: big_o
+    question: >-
+      What is the worst-case number of comparisons made by binary search on a sorted array
+      of n elements?
+    instructor_answer: >-
+      About log n (base 2) comparisons, because every comparison halves the part of the
+      array that is still being searched.
+    student_answer: >-
+      Binary search is O(n log n) in the worst case because the array has to be divided in
+      half again and again.
+    output:
+      label: BOsearchVsSort
+      evidence:
+        - {source: student_answer, span: "Binary search is O(n log n) in the worst case"}
+      confidence: 0.85
+    rationale: A sorting-style bound given for the cost of one search.
+
+  - id: fs02
+    authored: true
+    concept: recursion
+    question: >-
+      Give two reasons why a recursive function can be slower or use more memory than an
+      equivalent loop.
+    instructor_answer: >-
+      Each recursive call has the overhead of a function call, and each call that has not
+      returned yet keeps its own stack frame, so memory grows with the depth of the recursion.
+    student_answer: >-
+      Every call that is still waiting has its own frame on the stack, so a deep recursion
+      uses a lot more memory than a loop does.
+    output:
+      label: none
+      evidence: []
+      confidence: 0.85
+    rationale: One of the two reasons, stated correctly. Incomplete, but no incorrect claim.
+
+  - id: fs03
+    authored: true
+    concept: big_o
+    question: >-
+      Bubble sort with an early-exit flag stops as soon as a full pass makes no swap. What
+      is its best-case number of comparisons on an array of n elements, and which input
+      produces it?
+    instructor_answer: >-
+      n - 1 comparisons, for an array that is already sorted: the first pass makes no swap
+      and the algorithm stops.
+    student_answer: >-
+      The best case is an array with a single element since then nothing has to be compared
+      or swapped, so it takes 0 comparisons.
+    output:
+      label: BObestCaseSmallestInput
+      evidence:
+        - {source: student_answer, span: "The best case is an array with a single element"}
+      confidence: 0.9
+    rationale: Best case read as the smallest input instead of the best arrangement of n elements.
+
+  - id: fs04
+    authored: true
+    concept: recursion
+    question: >-
+      What is the base case of a recursive binary search on a sorted array?
+    instructor_answer: >-
+      The search range is empty (first > last), which means the key is not present, or the
+      middle element equals the key.
+    student_answer: >-
+      Binary search takes O(log n) time because it cuts the array in half at every step.
+    output:
+      label: other_error
+      evidence:
+        - {source: student_answer, span: "Binary search takes O(log n) time"}
+      confidence: 0.8
+    rationale: >-
+      A true statement about running time, but the question asked for the base case. The
+      answer addresses a different question and matches no catalogued item.
+
+  - id: fs05
+    authored: true
+    concept: recursion
+    question: >-
+      The function below is called as countDown(7). Does the call terminate? Explain.
+      void countDown(int n) { if (n == 0) return; cout << n; countDown(n - 2); }
+    instructor_answer: >-
+      No. The argument takes the values 7, 5, 3, 1, -1 and so on and never equals 0, so the
+      base case is never reached and the recursion does not stop.
+    student_answer: >-
+      Yes it terminates. The function has a base case that returns when n is 0, so the
+      recursion will stop once it gets down there.
+    output:
+      label: InfiniteExecution
+      evidence:
+        - {source: student_answer, span: "The function has a base case that returns when n is 0, so the recursion will stop"}
+      confidence: 0.9
+    rationale: Believes that the presence of a base case guarantees termination although the step skips it.
+
+  - id: fs06
+    authored: true
+    concept: big_o
+    question: >-
+      What is the worst-case running time of selection sort on n elements, and why?
+    instructor_answer: >-
+      O(n^2): it makes n - 1 passes, and each pass scans all of the remaining elements to
+      find the minimum.
+    student_answer: >-
+      The worst case of selection sort is the time it needs when the input is the worst
+      possible one for it.
+    output:
+      label: insufficient_evidence
+      evidence: []
+      confidence: 0.8
+    rationale: Restates the question; there is no cost claim to judge.
+
+  - id: fs07
+    authored: true
+    concept: big_o
+    question: >-
+      A set of 1,023 integer keys is stored in a perfectly balanced binary search tree.
+      About how many keys does a lookup compare against before it can report that a key is
+      absent?
+    instructor_answer: >-
+      About 10: one key on each level of the tree, because every comparison discards one of
+      the two subtrees.
+    student_answer: >-
+      On average around 511 because you end up checking about half of the keys in the tree
+      before you know it is not there, and 1,023 in the worst case.
+    output:
+      label: BOsearchLinearScan
+      evidence:
+        - {source: student_answer, span: "you end up checking about half of the keys in the tree"}
+      confidence: 0.9
+    rationale: Cost of a tree search estimated as proportional to the number of nodes, as in a linear scan.
+
+  - id: fs08
+    authored: true
+    concept: recursion
+    question: >-
+      The function below prints a linked list in reverse order. Is anything missing from
+      the recursive call?
+      void printReverse(Node* p) { if (p == nullptr) return; printReverse(p->next); cout << p->data; }
+    instructor_answer: >-
+      Nothing is missing. The function is void, so the recursive call is an ordinary
+      statement and no return is needed in front of it.
+    student_answer: >-
+      It is missing a return. A recursive call always has to be written as return
+      printReverse(p->next) or else the recursion does not come back properly.
+    output:
+      label: RCreturnIsRequired
+      evidence:
+        - {source: student_answer, span: "A recursive call always has to be written as return printReverse(p->next)"}
+      confidence: 0.9
+    rationale: Believes every recursive call needs the return keyword, even in a void function.

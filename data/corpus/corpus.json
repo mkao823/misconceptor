@@ -1,0 +1,37 @@
+{
+  "corpus_hash": "17795a06407cd4f684937c7ec332ff89dc301449d31137c0fb9804fdbe051e57",
+  "n_chunks": 102,
+  "chunker": {
+    "version": 1,
+    "min_words": 150,
+    "max_words": 250
+  },
+  "words_per_chunk": {
+    "min": 11,
+    "max": 249,
+    "total": 7074
+  },
+  "files": [
+    {
+      "path": "instructor_answers.md",
+      "source": "mohler_instructor_answers",
+      "sha256": "677c9ddab9baabeac2aaa204c0a339821aa2af595d7c8ba015e2283270d14da5",
+      "n_chunks": 81,
+      "n_words": 2292
+    },
+    {
+      "path": "notes_algorithm_analysis.md",
+      "source": "notes_algorithm_analysis",
+      "sha256": "1825532696237cd9181e0a4e21b03fc6a495823fab7b365f42e0c556d170e7d8",
+      "n_chunks": 10,
+      "n_words": 2351
+    },
+    {
+      "path": "notes_recursion.md",
+      "source": "notes_recursion",
+      "sha256": "f2da2cf41c24472269305129aa6b1f7fc888e97c4c068d91edcb5f340132d3f3",
+      "n_chunks": 11,
+      "n_words": 2431
+    }
+  ]
+}

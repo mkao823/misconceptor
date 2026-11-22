@@ -11,6 +11,9 @@ the template name and the SHA-256 of its text.
 If the model's output fails to parse or validate, up to ``max_repairs`` extra
 round-trips append the error and ask for a corrected JSON object. Every call
 goes through the LLM cache, so repairs are deterministic too.
+
+``complete_and_validate`` is that call / parse / validate / repair loop on its
+own; conditions 2 and 3 render their own messages and reuse it.
 """
 
 from __future__ import annotations
@@ -69,12 +72,32 @@ def render_messages(template: PromptTemplate, row: dict, labels: list[str]) -> l
 def predict_row(row: dict, client: LLMClient, template: PromptTemplate, labels: list[str],
                 *, temperature: float = 0.0, seed: int | None = 0, max_tokens: int = 2048,
                 json_mode: bool = True, max_repairs: int = 1) -> tuple[Record | None, dict | None]:
-    """Return (record, None) on success or (None, error_dict) on failure.
+    """Condition 1 for one row: render the template, then ``complete_and_validate``."""
+    return complete_and_validate(row, client, render_messages(template, row, labels), labels,
+                                 temperature=temperature, seed=seed, max_tokens=max_tokens,
+                                 json_mode=json_mode, max_repairs=max_repairs)
 
-    The error dict carries the stage (llm_call / parse / validate), the message and
-    the raw text of the last attempt, plus token usage so failed rows still count.
+
+def prompt_chars(messages: list[dict]) -> int:
+    return sum(len(m.get("content") or "") for m in messages)
+
+
+def complete_and_validate(row: dict, client: LLMClient, messages: list[dict], labels: list[str],
+                          *, temperature: float = 0.0, seed: int | None = 0, max_tokens: int = 2048,
+                          json_mode: bool = True, max_repairs: int = 1,
+                          retrieved_chunks: list[str] | None = None, taxonomy_text: str | None = None,
+                          extra_meta: dict | None = None) -> tuple[Record | None, dict | None]:
+    """Send ``messages``, parse and validate the reply, repair up to ``max_repairs`` times.
+
+    Returns (record, None) on success or (None, error_dict) on failure. The error dict
+    carries the stage (llm_call / parse / validate), the message and the raw text of the
+    last attempt, plus token usage so failed rows still count. ``retrieved_chunks`` and
+    ``taxonomy_text`` are the texts shown in the prompt; spans cited from them are checked
+    against them (see src/schema.py). ``extra_meta`` (for example the retrieved chunk ids
+    and scores) is copied into the record's meta and into the error dict.
     """
-    messages = render_messages(template, row, labels)
+    extra = dict(extra_meta or {})
+    n_chars = prompt_chars(messages)
     usage_prompt = usage_completion = 0
     cached_all = True
     attempts = 0
@@ -88,7 +111,8 @@ def predict_row(row: dict, client: LLMClient, template: PromptTemplate, labels: 
         except LLMError as e:
             return None, {"id": row["id"], "stage": "llm_call", "error": str(e), "raw": last_raw,
                           "attempts": attempts, "usage": {"prompt_tokens": usage_prompt,
-                                                          "completion_tokens": usage_completion}}
+                                                          "completion_tokens": usage_completion},
+                          "prompt_chars": n_chars, **extra}
         usage_prompt += resp.usage.prompt_tokens
         usage_completion += resp.usage.completion_tokens
         cached_all = cached_all and resp.cached
@@ -97,7 +121,8 @@ def predict_row(row: dict, client: LLMClient, template: PromptTemplate, labels: 
             obj = parse_json_object(resp.text)
             stage = "validate"
             record = validate_record(obj, row_id=row["id"], student_answer=row["student_answer"],
-                                     labels=labels, raw=resp.text, question_id=row.get("question_id"))
+                                     labels=labels, raw=resp.text, question_id=row.get("question_id"),
+                                     retrieved_chunks=retrieved_chunks, taxonomy_text=taxonomy_text)
         except SchemaError as e:
             stage = "parse" if "JSON" in str(e) or "empty" in str(e) else "validate"
             last_err = (stage, str(e))
@@ -113,8 +138,10 @@ def predict_row(row: dict, client: LLMClient, template: PromptTemplate, labels: 
             "prompt_tokens": usage_prompt, "completion_tokens": usage_completion,
             "cached": cached_all, "attempts": attempts, "finish_reason": resp.finish_reason,
             "cache_key": resp.cache_key, "reasoning_chars": len(resp.reasoning or ""),
+            "prompt_chars": n_chars, **extra,
         })
         return record, None
     stage, msg = last_err or ("validate", "unknown")
     return None, {"id": row["id"], "stage": stage, "error": msg, "raw": last_raw, "attempts": attempts,
-                  "usage": {"prompt_tokens": usage_prompt, "completion_tokens": usage_completion}}
+                  "usage": {"prompt_tokens": usage_prompt, "completion_tokens": usage_completion},
+                  "prompt_chars": n_chars, **extra}

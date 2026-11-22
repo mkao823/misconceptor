@@ -8,6 +8,12 @@ The network layer is a pluggable ``transport``: a callable that takes the reques
 kwargs (as passed to ``chat.completions.create``) and returns the response as a
 plain dict in the OpenAI chat-completion shape. ``OpenAITransport`` wraps the
 official SDK; ``MockTransport`` returns canned content for tests and smoke runs.
+
+Context window. Ollama loads a model with a fixed context (4096 tokens unless the
+server was started with OLLAMA_CONTEXT_LENGTH) and silently truncates a longer
+prompt; the OpenAI-compatible endpoint cannot change it per request.
+``LLMClient.loaded_context_length()`` reads the window the model is loaded with so
+a run can refuse to start when its prompts would not fit (scripts/run_condition.py).
 """
 
 from __future__ import annotations
@@ -15,6 +21,7 @@ from __future__ import annotations
 import hashlib
 import json
 import time
+import urllib.request
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -111,6 +118,23 @@ class OpenAITransport:
         except Exception:  # noqa: BLE001 - any failure means "not reachable"
             return False
 
+    def context_length(self, model: str) -> int | None:
+        """Context window (tokens) an Ollama server has ``model`` loaded with, from /api/ps.
+        None when the model is not loaded or the server does not answer like Ollama."""
+        if not self.base_url:
+            return None
+        root = self.base_url.rstrip("/")
+        root = root[:-3] if root.endswith("/v1") else root
+        try:
+            with urllib.request.urlopen(f"{root}/api/ps", timeout=5.0) as resp:
+                loaded = json.load(resp).get("models") or []
+        except Exception:  # noqa: BLE001
+            return None
+        for m in loaded:
+            if model in (m.get("name"), m.get("model")):
+                return m.get("context_length")
+        return None
+
 
 class MockTransport:
     """Returns canned content; records every request. ``content`` may be a str or a callable."""
@@ -189,6 +213,33 @@ class LLMClient:
                        "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                        "request": request, "response": response}, f, ensure_ascii=False, indent=1)
         tmp.replace(path)
+
+    def is_cached(self, messages: list[dict], *, temperature: float = 0.0, seed: int | None = 0,
+                  max_tokens: int = 1024, json_mode: bool = True) -> bool:
+        """True when ``chat`` with these arguments would be served from the disk cache."""
+        if not self.use_cache:
+            return False
+        return self._cache_path(make_cache_key(self.model, messages, temperature, seed, max_tokens,
+                                               json_mode)).exists()
+
+    def loaded_context_length(self, load: bool = True) -> int | None:
+        """Context window the server has this model loaded with (Ollama only), else None.
+
+        With ``load``, a model that is not loaded yet is loaded first with a one-token
+        request that bypasses the cache and the usage counters.
+        """
+        probe = getattr(self.transport, "context_length", None)
+        if self.provider != "ollama" or probe is None:
+            return None
+        ctx = probe(self.model)
+        if ctx is None and load:
+            try:
+                self.transport({"model": self.model, "messages": [{"role": "user", "content": "ping"}],
+                                "max_tokens": 1})
+            except Exception:  # noqa: BLE001 - the real calls will report the failure
+                return None
+            ctx = probe(self.model)
+        return ctx
 
     # -- calls -----------------------------------------------------------------
     def chat(self, messages: list[dict], *, temperature: float = 0.0, seed: int | None = 0,

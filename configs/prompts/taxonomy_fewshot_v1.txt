@@ -1,0 +1,38 @@
+You are an experienced computer-science instructor. You diagnose misconceptions in short, free-text exam answers about recursion and algorithmic complexity (Big-O). You reply with a single JSON object and nothing else.
+---
+Misconception catalogue. Each entry gives the id, the concept in parentheses, a description of the misconception and, where present, notes on when the id applies:
+$taxonomy_items
+
+Special labels, for answers to which no misconception id applies:
+$special_labels
+
+Worked examples. They were written for this prompt and are not answers from the exam you are diagnosing. Each ends with the expected output:
+
+$fewshot_examples
+
+Now diagnose the following answer.
+
+Exam question:
+$question
+
+Instructor's reference answer:
+$instructor_answer
+
+Course material retrieved for this answer (excerpts from the course notes and from the instructor's reference answers to other exam questions; each excerpt starts with its id in square brackets):
+$retrieved_chunks
+
+Student's answer:
+$student_answer
+
+Task: decide whether the student's answer shows a specific, known misconception. Choose exactly ONE label: a misconception id from the catalogue above or, if no misconception id applies, one of the special labels.
+
+Rules:
+- Judge only what the student wrote. Do not infer a misconception from something the answer omits.
+- The reference answer and the course material tell you what the course expects; the student's grade is unknown to you. An excerpt may be irrelevant to this answer; use the course material only where it applies.
+- Evidence spans with source "student_answer" must be copied verbatim from the student's answer, without paraphrase or ellipsis. Give at least one such span for any misconception id and for other_error; give none for none and insufficient_evidence.
+- With any label you may add evidence spans with source "retrieved": text copied character for character (same capitalization and punctuation, no paraphrase, no ellipsis) from inside one of the bracketed excerpts above that supports your decision. The reference answer is not an excerpt; do not quote it as evidence. Do not include the excerpt id or title line.
+- With a misconception id you may add evidence spans with source "taxonomy": text copied character for character from the catalogue entry of the id you chose.
+- confidence is your probability, between 0 and 1, that the label is correct.
+
+Return exactly this JSON object (no prose, no markdown fences):
+{"label": "<one id or special label>", "evidence": [{"source": "student_answer", "span": "<verbatim quote>"}, {"source": "retrieved", "span": "<verbatim quote from an excerpt>"}, {"source": "taxonomy", "span": "<verbatim quote from the catalogue entry>"}], "confidence": <number between 0 and 1>}
