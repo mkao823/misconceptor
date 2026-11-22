@@ -1,0 +1,276 @@
+{
+  "run_id": "2_gpt-oss-20b_20261122-044046",
+  "condition": 2,
+  "condition_name": "rag",
+  "model": "gpt-oss:20b",
+  "evaluated_at": "2026-11-22T13:17:24+00:00",
+  "gold": {
+    "path": "annotation/gold_provisional.csv",
+    "sha256": "be5782f628edae0fd9b21136d751d710344dfcd3ab37f9e66cf13361aa6beb52",
+    "n_rows": 63,
+    "n_labeled": 63,
+    "n_unlabeled": 0,
+    "invalid_gold_labels": {},
+    "citation_validity": {
+      "n_with_spans": 22,
+      "n_valid": 22,
+      "rate": 1.0,
+      "invalid_rows": []
+    }
+  },
+  "predictions": {
+    "n": 63,
+    "n_errors": 0,
+    "n_cached": 6,
+    "label_distribution": {
+      "other_error": 27,
+      "none": 23,
+      "BOsearchLinearScan": 4,
+      "BObestCaseSmallestInput": 3,
+      "insufficient_evidence": 2,
+      "BOsearchVsSort": 2,
+      "BCwrite": 1,
+      "BaseCaseNotNeeded": 1
+    },
+    "coverage": 0.9682539682539683,
+    "citation_validity": {
+      "n_records": 63,
+      "n_with_student_spans": 57,
+      "n_valid": 56,
+      "rate": 0.9824561403508771,
+      "rate_all": 0.9841269841269841,
+      "retrieved": {
+        "n_with_spans": 37,
+        "n_valid": 36,
+        "rate": 0.972972972972973
+      },
+      "taxonomy": {
+        "n_with_spans": 0,
+        "n_valid": 0,
+        "rate": null
+      }
+    }
+  },
+  "gold_available": true,
+  "scores": {
+    "n_scored": 63,
+    "n_missing_predictions": 0,
+    "missing_ids": [],
+    "labels_in_gold": [
+      "none",
+      "other_error",
+      "insufficient_evidence",
+      "BObestWorstSwapped",
+      "BObestCaseSmallestInput",
+      "BOsearchLinearScan",
+      "BOsearchVsSort"
+    ],
+    "macro_f1": 0.6043719926995188,
+    "macro_f1_ci": {
+      "point": 0.6043719926995188,
+      "lower": 0.4181321931288238,
+      "upper": 0.7570108543417366,
+      "mean": 0.5936896593771046,
+      "n_resamples": 2000,
+      "seed": 0,
+      "alpha": 0.05,
+      "n_rows": 63
+    },
+    "accuracy": 0.6984126984126984,
+    "per_class": {
+      "none": {
+        "precision": 0.9130434782608695,
+        "recall": 0.8076923076923077,
+        "f1": 0.8571428571428572,
+        "support": 26,
+        "predicted": 23
+      },
+      "other_error": {
+        "precision": 0.4444444444444444,
+        "recall": 0.8571428571428571,
+        "f1": 0.5853658536585367,
+        "support": 14,
+        "predicted": 27
+      },
+      "insufficient_evidence": {
+        "precision": 1.0,
+        "recall": 0.4,
+        "f1": 0.5714285714285715,
+        "support": 5,
+        "predicted": 2
+      },
+      "BObestWorstSwapped": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 2,
+        "predicted": 0
+      },
+      "BObestCaseSmallestInput": {
+        "precision": 1.0,
+        "recall": 0.6,
+        "f1": 0.7499999999999999,
+        "support": 5,
+        "predicted": 3
+      },
+      "BOsearchLinearScan": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "support": 8,
+        "predicted": 4
+      },
+      "BOsearchVsSort": {
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "f1": 0.8,
+        "support": 3,
+        "predicted": 2
+      }
+    },
+    "confusion": {
+      "labels": [
+        "none",
+        "other_error",
+        "insufficient_evidence",
+        "BObestWorstSwapped",
+        "BObestCaseSmallestInput",
+        "BOsearchLinearScan",
+        "BOsearchVsSort",
+        "BCwrite",
+        "BaseCaseNotNeeded"
+      ],
+      "matrix": [
+        [
+          21,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          2,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "coverage": 0.9682539682539683,
+    "covered_accuracy": 0.6885245901639344,
+    "abstention": {
+      "n_abstained": 2,
+      "n_gold_abstain": 5
+    },
+    "four_way": {
+      "macro_f1": 0.6586567343505948
+    },
+    "macro_f1_excluding_abstain": 0.6098625629113434
+  },
+  "comparison": {
+    "other_run": "1_gpt-oss-20b_20261122-042535",
+    "macro_f1_other": 0.38839045131794797,
+    "macro_f1_this": 0.6043719926995188,
+    "paired_bootstrap_this_minus_other": {
+      "diff": 0.21598154138157083,
+      "lower": 0.055676797493286884,
+      "upper": 0.35379152840593425,
+      "p_value": 0.009,
+      "n_resamples": 2000,
+      "seed": 0,
+      "alpha": 0.05,
+      "n_rows": 63
+    },
+    "mcnemar": {
+      "b": 3,
+      "c": 6,
+      "p_value": 0.5078125
+    }
+  }
+}

@@ -1,0 +1,584 @@
+{
+  "condition": 1,
+  "condition_name": "direct",
+  "timestamp": "2026-11-22T04:25:35-08:00",
+  "git": {
+    "commit": "0869d994551fc83aa1929496fc7fa44666d70d61",
+    "dirty": true
+  },
+  "sheet": {
+    "path": "annotation/pilot_sheet.csv",
+    "sha256": "b3475aa0c690d7e9cf04eb6598ec4f9d04a16b42faa637c2e151b7f3cd87d6e6",
+    "n_rows_total": 63,
+    "n_rows_run": 63,
+    "limit": null
+  },
+  "taxonomy": {
+    "path": "taxonomy/recursion_bigO.yaml",
+    "version": "0.2",
+    "sha256": "62bba49c188c1eb3d0b8fa9ae6c20ee468acbc108e17cf3af6b9577b885e59fc",
+    "n_labels": 31
+  },
+  "model": "gpt-oss:20b",
+  "provider": "ollama",
+  "transport": "openai-compatible",
+  "prompt_template": {
+    "name": "direct_v1",
+    "path": "configs/prompts/direct_v1.txt",
+    "sha256": "f63aff45d26a2099a697781ca49ec5615ab2a6b702c4076f3bf1c6c4870df4ad"
+  },
+  "temperature": 0.0,
+  "seed": 0,
+  "max_tokens": 2048,
+  "json_mode": true,
+  "max_repairs": 1,
+  "cache_used": true,
+  "retrieval": null,
+  "fewshot": null,
+  "context_window": {
+    "context_length": 16384,
+    "max_prompt_chars": 2840,
+    "estimated_tokens_needed": 2995
+  },
+  "tokens": {
+    "prompt_tokens": 39000,
+    "completion_tokens": 37973,
+    "total_tokens": 76973
+  },
+  "tokens_uncached": {
+    "prompt_tokens": 35244,
+    "completion_tokens": 36359,
+    "total_tokens": 71603
+  },
+  "calls": {
+    "uncached": 57,
+    "cached": 6
+  },
+  "tokens_per_row": {
+    "n_rows": 63,
+    "mean_prompt_tokens": 619.0,
+    "mean_completion_tokens": 602.7,
+    "mean_total_tokens": 1221.8
+  },
+  "calls_per_row": {
+    "n_rows": 63,
+    "mean_calls": 1.0,
+    "min_calls": 1,
+    "max_calls": 1
+  },
+  "per_row": [
+    {
+      "id": "E03.Q06.A00",
+      "prompt_tokens": 635,
+      "completion_tokens": 286,
+      "total_tokens": 921,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q06.A01",
+      "prompt_tokens": 607,
+      "completion_tokens": 227,
+      "total_tokens": 834,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q06.A03",
+      "prompt_tokens": 639,
+      "completion_tokens": 209,
+      "total_tokens": 848,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q06.A15",
+      "prompt_tokens": 640,
+      "completion_tokens": 235,
+      "total_tokens": 875,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q06.A30",
+      "prompt_tokens": 638,
+      "completion_tokens": 490,
+      "total_tokens": 1128,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q04.A03",
+      "prompt_tokens": 612,
+      "completion_tokens": 254,
+      "total_tokens": 866,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q04.A06",
+      "prompt_tokens": 597,
+      "completion_tokens": 167,
+      "total_tokens": 764,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q04.A12",
+      "prompt_tokens": 597,
+      "completion_tokens": 167,
+      "total_tokens": 764,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q04.A13",
+      "prompt_tokens": 597,
+      "completion_tokens": 961,
+      "total_tokens": 1558,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q04.A19",
+      "prompt_tokens": 653,
+      "completion_tokens": 907,
+      "total_tokens": 1560,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q04.A25",
+      "prompt_tokens": 611,
+      "completion_tokens": 228,
+      "total_tokens": 839,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q04.A27",
+      "prompt_tokens": 596,
+      "completion_tokens": 161,
+      "total_tokens": 757,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A02",
+      "prompt_tokens": 644,
+      "completion_tokens": 960,
+      "total_tokens": 1604,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A04",
+      "prompt_tokens": 606,
+      "completion_tokens": 583,
+      "total_tokens": 1189,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A08",
+      "prompt_tokens": 664,
+      "completion_tokens": 259,
+      "total_tokens": 923,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A09",
+      "prompt_tokens": 617,
+      "completion_tokens": 1398,
+      "total_tokens": 2015,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A14",
+      "prompt_tokens": 647,
+      "completion_tokens": 307,
+      "total_tokens": 954,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A15",
+      "prompt_tokens": 614,
+      "completion_tokens": 1789,
+      "total_tokens": 2403,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A16",
+      "prompt_tokens": 611,
+      "completion_tokens": 631,
+      "total_tokens": 1242,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A18",
+      "prompt_tokens": 624,
+      "completion_tokens": 623,
+      "total_tokens": 1247,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A25",
+      "prompt_tokens": 641,
+      "completion_tokens": 638,
+      "total_tokens": 1279,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E05.Q03.A27",
+      "prompt_tokens": 633,
+      "completion_tokens": 1082,
+      "total_tokens": 1715,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A02",
+      "prompt_tokens": 612,
+      "completion_tokens": 374,
+      "total_tokens": 986,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A08",
+      "prompt_tokens": 599,
+      "completion_tokens": 368,
+      "total_tokens": 967,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A10",
+      "prompt_tokens": 601,
+      "completion_tokens": 627,
+      "total_tokens": 1228,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A11",
+      "prompt_tokens": 599,
+      "completion_tokens": 381,
+      "total_tokens": 980,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A14",
+      "prompt_tokens": 598,
+      "completion_tokens": 669,
+      "total_tokens": 1267,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A15",
+      "prompt_tokens": 611,
+      "completion_tokens": 1923,
+      "total_tokens": 2534,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A21",
+      "prompt_tokens": 613,
+      "completion_tokens": 662,
+      "total_tokens": 1275,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E10.Q07.A23",
+      "prompt_tokens": 599,
+      "completion_tokens": 375,
+      "total_tokens": 974,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A04",
+      "prompt_tokens": 601,
+      "completion_tokens": 540,
+      "total_tokens": 1141,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A06",
+      "prompt_tokens": 638,
+      "completion_tokens": 1007,
+      "total_tokens": 1645,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A07",
+      "prompt_tokens": 599,
+      "completion_tokens": 659,
+      "total_tokens": 1258,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A09",
+      "prompt_tokens": 595,
+      "completion_tokens": 1039,
+      "total_tokens": 1634,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A13",
+      "prompt_tokens": 687,
+      "completion_tokens": 454,
+      "total_tokens": 1141,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A17",
+      "prompt_tokens": 621,
+      "completion_tokens": 250,
+      "total_tokens": 871,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A18",
+      "prompt_tokens": 593,
+      "completion_tokens": 638,
+      "total_tokens": 1231,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A22",
+      "prompt_tokens": 603,
+      "completion_tokens": 668,
+      "total_tokens": 1271,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A24",
+      "prompt_tokens": 594,
+      "completion_tokens": 475,
+      "total_tokens": 1069,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A25",
+      "prompt_tokens": 587,
+      "completion_tokens": 1779,
+      "total_tokens": 2366,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E12.Q10.A27",
+      "prompt_tokens": 610,
+      "completion_tokens": 653,
+      "total_tokens": 1263,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A01",
+      "prompt_tokens": 619,
+      "completion_tokens": 281,
+      "total_tokens": 900,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A03",
+      "prompt_tokens": 683,
+      "completion_tokens": 771,
+      "total_tokens": 1454,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A04",
+      "prompt_tokens": 617,
+      "completion_tokens": 705,
+      "total_tokens": 1322,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A07",
+      "prompt_tokens": 598,
+      "completion_tokens": 586,
+      "total_tokens": 1184,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A10",
+      "prompt_tokens": 614,
+      "completion_tokens": 617,
+      "total_tokens": 1231,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A12",
+      "prompt_tokens": 589,
+      "completion_tokens": 169,
+      "total_tokens": 758,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A13",
+      "prompt_tokens": 597,
+      "completion_tokens": 422,
+      "total_tokens": 1019,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A15",
+      "prompt_tokens": 664,
+      "completion_tokens": 1114,
+      "total_tokens": 1778,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A17",
+      "prompt_tokens": 595,
+      "completion_tokens": 346,
+      "total_tokens": 941,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A20",
+      "prompt_tokens": 614,
+      "completion_tokens": 610,
+      "total_tokens": 1224,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A21",
+      "prompt_tokens": 618,
+      "completion_tokens": 729,
+      "total_tokens": 1347,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A22",
+      "prompt_tokens": 620,
+      "completion_tokens": 975,
+      "total_tokens": 1595,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A24",
+      "prompt_tokens": 621,
+      "completion_tokens": 200,
+      "total_tokens": 821,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E03.Q07.A29",
+      "prompt_tokens": 604,
+      "completion_tokens": 645,
+      "total_tokens": 1249,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A12",
+      "prompt_tokens": 632,
+      "completion_tokens": 294,
+      "total_tokens": 926,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A14",
+      "prompt_tokens": 630,
+      "completion_tokens": 146,
+      "total_tokens": 776,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A19",
+      "prompt_tokens": 634,
+      "completion_tokens": 376,
+      "total_tokens": 1010,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A24",
+      "prompt_tokens": 662,
+      "completion_tokens": 912,
+      "total_tokens": 1574,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A25",
+      "prompt_tokens": 614,
+      "completion_tokens": 1298,
+      "total_tokens": 1912,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A26",
+      "prompt_tokens": 614,
+      "completion_tokens": 199,
+      "total_tokens": 813,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A27",
+      "prompt_tokens": 643,
+      "completion_tokens": 324,
+      "total_tokens": 967,
+      "calls": 1,
+      "error": false
+    },
+    {
+      "id": "E11.Q09.A28",
+      "prompt_tokens": 635,
+      "completion_tokens": 151,
+      "total_tokens": 786,
+      "calls": 1,
+      "error": false
+    }
+  ],
+  "cost": {
+    "usd": 0.0,
+    "note": "from ollama.cost_per_1m_tokens over all tokens incl. cache hits"
+  },
+  "n_predictions": 63,
+  "n_errors": 0,
+  "wall_seconds": 911.1,
+  "base_url": "http://localhost:11434/v1",
+  "run_id": "1_gpt-oss-20b_20261122-042535"
+}
