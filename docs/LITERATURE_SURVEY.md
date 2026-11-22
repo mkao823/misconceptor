@@ -17,6 +17,9 @@ original entries are kept. Each one now has a **Verification** line.
 - Entries added on 2026-10-18 follow docs/REVIEW_2026-10-18.md (sections 3.1
   to 3.5 and 7). Each was re-confirmed by search or fetch on that date, and
   its Verification line says which.
+- Corrections made on 2026-11-22 are marked in place: the Hamouda et al. page
+  range, the DOIs of the ProgMiscon paper and of Götschi et al., the JorGPT
+  relevance note, and the wording of the gap statement.
 
 ---
 
@@ -31,9 +34,13 @@ questions from 2025–2026 university assessments, from 79 anonymized students.
 Includes original Spanish answers with English translations, instructor ideal
 answers, 0–10 human grades with qualitative feedback, and DeepSeek/Qwen/Gemini
 evaluations under a shared JSON schema. **It contains no misconception labels.**
-**Relevance:** our candidate source data. Any misconception labels have to be
-added by us as an annotation layer, and in-scope coverage for recursion/Big-O
-is not yet known (feasibility pilot).
+**Relevance:** the dataset the project was first proposed on. It has no
+misconception labels, and our feasibility pilot of 2026-10-15 found that 0 of
+its 50 questions are about recursion or Big-O, so it supplies no eval data
+(docs/PROJECT_PROPOSAL.md, Data). It stays relevant as the data analyzed by
+Zhao, Jiao & Xu (below).
+*Update 2026-11-22:* this note used to call JorGPT our candidate source data
+with in-scope coverage unknown; the pilot has since answered that.
 *Verification:* Verified (metadata and abstract). Authors: TODO: verify.
 *Correction:* earlier drafts called this "ground-truth-adjacent" data for
 diagnosis. That overstated it; the human ground truth is scores and feedback,
@@ -151,7 +158,7 @@ data.
 
 **Taxonomy source: recursion.** Hamouda, Edwards, Elmongui, Ernst & Shaffer,
 "A basic recursion concept inventory," *Computer Science Education*, 27(2),
-120–147, 2017. doi:10.1080/08993408.2017.1414728. Open PDF:
+121–148, 2017. doi:10.1080/08993408.2017.1414728. Open PDF:
 https://people.cs.vt.edu/~shaffer/Papers/RecurTutorCIPublished.pdf
 The misconception list came from instructor input, the literature and an
 analysis of approximately 8,000 responses to recursion exam questions over
@@ -169,11 +176,19 @@ reports per-item prevalence for each administration (for example `BCwrite`
 their tags. Nine of the twelve items require seeing the student reason about
 code (tracing or writing), so only a few can be evidenced by recall answers
 like Mohler's; see docs/REVIEW_2026-10-18.md, section 3.2.
+*Note 2026-11-22:* "nine of the twelve" is the review's reading. The taxonomy
+file's `observable_in` field marks six of the twelve as observable only in
+code. The two readings have not been reconciled (docs/REPORT_DRAFT.md,
+section 4.3, TODO R12).
 *Verification:* Verified (full text). The open PDF was fetched and its text
 extracted on 2026-10-18; the twelve tags, the five groups, the
 misconception/difficulty labels, the ~8,000-response figure and the two
 prevalence figures above were read from it. Use these tags, not invented
 codes such as "MR1".
+*Correction 2026-11-22:* the page range was 120–147 here and 121–148 in
+taxonomy/recursion_bigO.yaml. The Crossref record for the DOI, fetched on
+2026-11-22, gives 121–148 (volume 27, issue 2), so this entry was wrong and
+is now fixed.
 
 **Taxonomy source: data structures & algorithms (systematic review).**
 Tilanterä & Korhonen, "Data structures and algorithms misconceptions in
@@ -271,7 +286,9 @@ on 2026-10-18. Full text not read.
 
 **Taxonomy source: programming misconceptions (ProgMiscon).** Chiodini,
 Moreno Santos, Gallidabino, Tafliovich, Santos & Hauswirth, "A Curated
-Inventory of Programming Language Misconceptions," *ITiCSE '21*; the live
+Inventory of Programming Language Misconceptions," *Proceedings of the 26th
+ACM Conference on Innovation and Technology in Computer Science Education
+V. 1 (ITiCSE '21)*, pp. 380–386, 2021. doi:10.1145/3430665.3456343; the live
 inventory is at https://progmiscon.org/misconceptions/.
 A curated, community-maintained inventory of programming-language
 misconceptions, browsable by concept, language and notional machine. On
@@ -283,13 +300,15 @@ them about recursion: `BaseCaseNotNeeded`, `RecursiveActivationsShareFrame`,
 to Hamouda et al.; no help on the complexity side.
 *Verification:* Verified (site fetched 2026-10-18). The listing and the
 site's About page (which gives the ITiCSE '21 citation and credits the
-Lugano Computing Education Research Lab) were fetched. The ITiCSE '21 paper
-itself was not separately searched or read; the entry count is our own
-tally of the listing.
+Lugano Computing Education Research Lab) were fetched. The entry count is our
+own tally of the listing. On 2026-11-22 the paper's bibliographic record
+(title, the six authors, proceedings, pp. 380–386, 2021) was confirmed from
+the Crossref metadata that doi.org returns for the DOI above, which is the DOI
+the taxonomy file cites. The ITiCSE '21 paper itself has still not been read.
 
 **Recursion mental models.** Götschi, Sanders & Galpin, "Mental models of
 recursion," *Proceedings of the SIGCSE 2003 Technical Symposium on Computer
-Science Education*, Reno, pp. 346–350.
+Science Education*, Reno, pp. 346–350. doi:10.1145/611892.612004.
 A study of first-year students' mental models of recursion at the University
 of the Witwatersrand over 2000–2002. Per the abstract, most students built
 the viable "copies" model, but many built non-viable models: looping,
@@ -303,7 +322,10 @@ evidenced.
 *Verification:* Verified (metadata and abstract) via the author's
 publication page (homepages.inf.ed.ac.uk/vgalpin1/pubs/GSG03.html) fetched
 on 2026-10-18. Full text not read. The 2006 follow-up was seen only in
-search snippets; its venue is not confirmed here.
+search snippets; its venue is not confirmed here. The DOI, which the taxonomy
+file cites, was confirmed via Crossref on 2026-11-22 (same title, the three
+authors, pp. 346–350, 2003; Crossref names the proceedings "Proceedings of
+the 34th SIGCSE technical symposium on Computer science education").
 
 **Base-case difficulties.** Haberman & Averbuch, "The case of base cases:
 why are they so difficult to recognize? Student difficulties with
@@ -470,9 +492,12 @@ isolates whether **iterative, critic-triggered retrieval** adds anything over
 a single-pass prompt that already contains the taxonomy.
 
 Our gap, stated relative to those two: real (not simulated) student answers
-on CS concepts (recursion, Big-O); labels drawn from published CS
-misconception catalogues (Hamouda et al.; Tilanterä & Korhonen; Farghally et
-al.; ProgMiscon) rather than free-form gap descriptions; and a controlled
+on CS concepts (recursion, Big-O); a closed label set rather than free-form
+gap descriptions, drawn from published CS misconception catalogues where the
+wording has been checked (Hamouda et al.; ProgMiscon), with mental-model
+names from Götschi et al. and four Big-O items that stay provisional until
+they are confirmed against Farghally et al. or Tilanterä & Korhonen (wording
+updated 2026-11-22 to match taxonomy/recursion_bigO.yaml); and a controlled
 test of one mechanism, critic-triggered re-retrieval, against
 compute-matched single-pass baselines, with a grounding-support check on the
 cited evidence. The Area 3 and Area 4 entries supply the feedback-quality and

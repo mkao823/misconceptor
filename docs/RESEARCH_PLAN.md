@@ -3,6 +3,22 @@
 *Not for resubmission. Written to internalize the professor's feedback and the
 class-wide announcement before starting implementation.*
 
+> **Status update (2026-11-22).** This plan was written before the pilot and
+> before anything was built, and its text below is kept as written. Where it
+> and the repository differ, the repository is right:
+> - The label set is the 28-item file `taxonomy/recursion_bigO.yaml` plus
+>   `none`, `other_error` and `insufficient_evidence`. It is not a subset of
+>   a "92-item" review, and 11 of the 28 items are provisional.
+> - The eval set is the 63-row sheet `annotation/pilot_sheet.csv`, not "~50
+>   cases", and it is still unlabeled. Annotation starts with a 14-answer
+>   calibration session and then covers all 63 rows, in place of the "10–15
+>   case" pilot followed by scaling up (annotation/README.md).
+> - Condition 1 as built lists the 28 label ids by name in its prompt, with
+>   no descriptions, examples or retrieval. Read "no taxonomy" below that
+>   way.
+> - No results exist. Status and the remaining order of work are in
+>   docs/PROJECT_PROPOSAL.md (Timeline).
+
 ## What the announcement is actually asking for
 
 Listing RAG + Planner + Executor + Critic + Memory + 3 LLMs is not a

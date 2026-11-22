@@ -16,7 +16,8 @@ python3 scripts/annotation_sheet.py                         # partial pass
 python3 scripts/annotation_sheet.py annotation/my_pass.csv  # full sheet copy
 python3 scripts/annotation_sheet.py --report > /tmp/progress.json
 python3 scripts/annotation_sheet.py --complete               # all 63 required
-python3 -m unittest discover -s tests -v
+python3 -m unittest discover -s tests -v                    # annotation tests only
+python3 -m pytest -q                                        # every test (same as make test)
 ```
 
 Reports are JSON; omit `--report` for concise validation. Invalid input exits 1
@@ -110,8 +111,18 @@ absent, so the original selection's completeness and top-20 ranking could not
 be independently rebuilt; no dataset was downloaded or sheet regenerated.
 The tests use synthetic assignments only and do not write to the pilot.
 
+Update 2026-11-22: in the main checkout the raw parquet is present
+(`data/raw/mohler/cleaned-oe-00001.parquet`). Running
+`scripts/build_pilot_sheet.py --out <temporary file>` there reproduced the
+unlabeled `pilot_sheet.csv` byte for byte, so the selection of the 43 low
+scorers and the top-20 ranking are now confirmed. The sheet itself was not
+rewritten.
+
 Dataset attribution is retained from the repository: Mohler, Bunescu &
 Mihalcea (2011), dataset `nkazi/MohlerASAG`, CC-BY-4.0. Source URL:
 https://huggingface.co/datasets/nkazi/MohlerASAG — **unverified (from memory /
-existing repository attribution); not checked this run**. Published-source
+existing repository attribution); not checked this run**. (The dataset card
+at this URL is listed among the sources consulted on 2026-10-18 in
+docs/REVIEW_2026-10-18.md; it was not re-checked for this record.)
+Published-source
 verification statuses in the taxonomy are inherited, not re-verified here.
