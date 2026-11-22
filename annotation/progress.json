@@ -1,0 +1,146 @@
+{
+  "schema_version": "0.2",
+  "total": 63,
+  "completed": 0,
+  "remaining": 63,
+  "primary_counts": {
+    "BFneverExecute": 0,
+    "BFexecuteBefore": 0,
+    "InfiniteExecution": 0,
+    "RCwrite": 0,
+    "RCnoReturnRequired": 0,
+    "RCreturnIsRequired": 0,
+    "BCbeforeRecursiveCase": 0,
+    "BCactionReturnConstant": 0,
+    "BCcheckAganistConstant": 0,
+    "BCwrite": 0,
+    "BCevaluation": 0,
+    "GlobalVariable": 0,
+    "BaseCaseNotNeeded": 0,
+    "RecursiveActivationsShareFrame": 0,
+    "RecursiveMethodImpliesRecursiveType": 0,
+    "RecursiveMethodNeedsIfElse": 0,
+    "RecursiveFunctionNeedsIfElse": 0,
+    "MMcopies": 0,
+    "MMlooping": 0,
+    "MMactive": 0,
+    "MMstep": 0,
+    "MMmagic": 0,
+    "MMreturnValue": 0,
+    "MModd": 0,
+    "BOsearchLinearScan": 0,
+    "BOsearchVsSort": 0,
+    "BObestCaseSmallestInput": 0,
+    "BObestWorstSwapped": 0,
+    "none": 0,
+    "other_error": 0,
+    "insufficient_evidence": 0
+  },
+  "secondary_counts": {},
+  "by_question": {
+    "E03.Q06": {
+      "total": 5,
+      "completed": 0
+    },
+    "E03.Q07": {
+      "total": 14,
+      "completed": 0
+    },
+    "E05.Q03": {
+      "total": 10,
+      "completed": 0
+    },
+    "E05.Q04": {
+      "total": 7,
+      "completed": 0
+    },
+    "E10.Q07": {
+      "total": 8,
+      "completed": 0
+    },
+    "E11.Q09": {
+      "total": 8,
+      "completed": 0
+    },
+    "E12.Q10": {
+      "total": 11,
+      "completed": 0
+    }
+  },
+  "low_scorers": {
+    "total": 43,
+    "completed": 0,
+    "other_error": 0,
+    "other_error_share_all_43": 0.0,
+    "other_error_share_completed": null,
+    "possible_final_share": [
+      0.0,
+      1.0
+    ],
+    "decision": "pending"
+  },
+  "zero_primary_taxonomy_ids": [
+    "BFneverExecute",
+    "BFexecuteBefore",
+    "InfiniteExecution",
+    "RCwrite",
+    "RCnoReturnRequired",
+    "RCreturnIsRequired",
+    "BCbeforeRecursiveCase",
+    "BCactionReturnConstant",
+    "BCcheckAganistConstant",
+    "BCwrite",
+    "BCevaluation",
+    "GlobalVariable",
+    "BaseCaseNotNeeded",
+    "RecursiveActivationsShareFrame",
+    "RecursiveMethodImpliesRecursiveType",
+    "RecursiveMethodNeedsIfElse",
+    "RecursiveFunctionNeedsIfElse",
+    "MMcopies",
+    "MMlooping",
+    "MMactive",
+    "MMstep",
+    "MMmagic",
+    "MMreturnValue",
+    "MModd",
+    "BOsearchLinearScan",
+    "BOsearchVsSort",
+    "BObestCaseSmallestInput",
+    "BObestWorstSwapped"
+  ],
+  "zero_any_taxonomy_ids": [
+    "BFneverExecute",
+    "BFexecuteBefore",
+    "InfiniteExecution",
+    "RCwrite",
+    "RCnoReturnRequired",
+    "RCreturnIsRequired",
+    "BCbeforeRecursiveCase",
+    "BCactionReturnConstant",
+    "BCcheckAganistConstant",
+    "BCwrite",
+    "BCevaluation",
+    "GlobalVariable",
+    "BaseCaseNotNeeded",
+    "RecursiveActivationsShareFrame",
+    "RecursiveMethodImpliesRecursiveType",
+    "RecursiveMethodNeedsIfElse",
+    "RecursiveFunctionNeedsIfElse",
+    "MMcopies",
+    "MMlooping",
+    "MMactive",
+    "MMstep",
+    "MMmagic",
+    "MMreturnValue",
+    "MModd",
+    "BOsearchLinearScan",
+    "BOsearchVsSort",
+    "BObestCaseSmallestInput",
+    "BObestWorstSwapped"
+  ],
+  "zero_count_caution": "Zero observed labels is not proof of unobservability, especially during a partial pass.",
+  "provisional_big_o_rows": [],
+  "candidate_counts": {},
+  "notes_for_review": []
+}
