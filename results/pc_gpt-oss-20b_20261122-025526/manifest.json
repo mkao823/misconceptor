@@ -1,0 +1,142 @@
+{
+  "run_id": "pc_gpt-oss-20b_20261122-025526",
+  "kind": "critic_positive_control",
+  "spec": "docs/CRITIC_SPEC.md",
+  "timestamp": "2026-11-22T02:55:26-08:00",
+  "git": {
+    "commit": "90fefaa38daefbc46fe9e90ac849faf7382d285f",
+    "dirty": true
+  },
+  "controls": {
+    "name": "critic_positive_control_v1",
+    "path": "configs/controls/critic_positive_control_v1.yaml",
+    "sha256": "255ff343a638fbaacbfc4ab43a74422bada36c596b55b3926e2a03462c2716e1",
+    "provenance": "Student answers invented for the Critic's positive control; not taken or adapted from annotation/pilot_sheet.csv or from any Mohler ASAG answer; not derived from model output. Questions and reference answers are the seven in-scope Mohler exam questions.",
+    "n_cases": 16,
+    "n_dependent": 8,
+    "n_independent": 8,
+    "limit_pairs": null
+  },
+  "model": "gpt-oss:20b",
+  "provider": "ollama",
+  "transport": "openai-compatible",
+  "base_url": "http://localhost:11434/v1",
+  "prompt_template": {
+    "name": "taxonomy_fewshot_v1",
+    "path": "configs/prompts/taxonomy_fewshot_v1.txt",
+    "sha256": "b2acd1d5594f8d3e4190daf14db48cd2002bdbc152b06367a337c6a8461f4450"
+  },
+  "critic_template": {
+    "name": "critic_v1",
+    "path": "configs/prompts/critic_v1.txt",
+    "sha256": "244e3317e8377bc080c1dbadf0113eb3e8855ba0897ca3e6bee4ade564ca3eb7"
+  },
+  "fewshot": {
+    "name": "fewshot_v1",
+    "sha256": "3177aa83aa38facabc2442012f63f062f20540dcfb948fb6dca1fe3bbdd4cdae"
+  },
+  "taxonomy": {
+    "path": "taxonomy/recursion_bigO.yaml",
+    "sha256": "1e2d0e32a76d2de5556468799fde70bef97b29007ec0bfea31b998e4a3cbc333",
+    "rendered_sha256": "91d380c4fd0b94a0fca4701f6ab6c67cff5c69c39b9978cd362d59bd597fbaa1"
+  },
+  "retrieval": {
+    "backend": "bm25",
+    "k": 4,
+    "corpus_hash": "17795a06407cd4f684937c7ec332ff89dc301449d31137c0fb9804fdbe051e57",
+    "n_chunks": 102,
+    "query": "question + student_answer",
+    "own_instructor_answer_withheld": true
+  },
+  "temperature": 0.0,
+  "seed": 0,
+  "max_tokens": 2048,
+  "json_mode": true,
+  "max_repairs": 1,
+  "cache_used": true,
+  "context_window": {
+    "context_length": 16384,
+    "max_prompt_chars": 22622,
+    "estimated_tokens_needed": 9589
+  },
+  "arms": {
+    "withheld": "supporting chunks excluded from the first retrieval only",
+    "present": "supporting chunks forced into the first-pass k",
+    "natural": "condition 3's ordinary retrieval (non-dependent cases)"
+  },
+  "summary": {
+    "arms": {
+      "withheld": {
+        "n": 8,
+        "n_judged": 7,
+        "n_errors": 1,
+        "n_triggered": 0,
+        "trigger_rate": 0.0
+      },
+      "present": {
+        "n": 8,
+        "n_judged": 7,
+        "n_errors": 1,
+        "n_triggered": 0,
+        "trigger_rate": 0.0
+      },
+      "natural": {
+        "n": 8,
+        "n_judged": 7,
+        "n_errors": 1,
+        "n_triggered": 0,
+        "trigger_rate": 0.0
+      }
+    },
+    "natural_by_kind": {
+      "matches_reference": {
+        "n_judged": 5,
+        "n_triggered": 0
+      },
+      "vague": {
+        "n_judged": 1,
+        "n_triggered": 0
+      },
+      "plainly_wrong": {
+        "n_judged": 1,
+        "n_triggered": 0
+      }
+    },
+    "recovery": {
+      "n_withheld_triggered": 0,
+      "n_recovered_any": 0,
+      "n_recovered_all": 0,
+      "rate_any_given_triggered": null,
+      "rate_any_over_withheld_judged": 0.0
+    },
+    "paired": {
+      "n_cases_both_arms_judged": 7,
+      "n_withheld_only": 0,
+      "n_both": 0,
+      "n_neither": 7,
+      "n_present_only": 0
+    },
+    "cost": {
+      "n_arms": 24,
+      "n_calls": 45,
+      "total_tokens": 171768,
+      "mean_tokens_per_arm": 7157.0,
+      "mean_calls_per_arm": 1.88
+    }
+  },
+  "tokens": {
+    "prompt_tokens": 147736,
+    "completion_tokens": 24032,
+    "total_tokens": 171768
+  },
+  "tokens_uncached": {
+    "prompt_tokens": 147736,
+    "completion_tokens": 24032,
+    "total_tokens": 171768
+  },
+  "calls": {
+    "uncached": 45,
+    "cached": 0
+  },
+  "wall_seconds": 1338.7
+}

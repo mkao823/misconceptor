@@ -39,6 +39,12 @@ generation:
   json_mode: true         # response_format: {"type": "json_object"}
   max_repairs: 1          # extra round-trips allowed when the output fails validation
 
-self_consistency:         # condition 4b
-  n_samples: TODO         # set so the total token budget matches condition 4
-  temperature: 0.7
+self_consistency:         # condition 4b (docs/CRITIC_SPEC.md section 7)
+  # N is not set here. It is derived at run time from the condition 4 run named with
+  # --match-run:  N = max(min_samples, ceil(T4 / T3)), T4 = that run's mean total tokens per
+  # row, T3 = mean tokens of one condition 3 call on the same rows. The 4b manifest records
+  # N, T4, T3 and the budget ratio 4b to 4. When the floor applies, 4b gets MORE tokens than
+  # condition 4, which favours this baseline.
+  n_samples: from_match_run
+  min_samples: 3          # the floor on N
+  temperature: 0.7        # sampling temperature; seeds are seed, seed + 1, ..., seed + N - 1

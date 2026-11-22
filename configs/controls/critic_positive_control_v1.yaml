@@ -1,0 +1,326 @@
+# Positive control for the Critic (condition 4), version 1.
+#
+# AUTHORED CONTROL MATERIAL. Every student answer in this file was invented for the control.
+# None is a row of annotation/pilot_sheet.csv, none is taken or adapted from a Mohler ASAG
+# answer, and nothing here was derived from model output. The seven questions and their
+# reference answers are the in-scope exam questions themselves (they have to be: the control
+# asks what the Critic does on those questions). tests/test_positive_control.py checks the
+# answers against the pilot sheet and, when the raw parquet is on disk, against every Mohler
+# answer, and checks the questions and reference answers against the sheet.
+#
+# These cases are NOT evaluation data. They carry no gold label and are never scored for
+# accuracy. They exist to ask one thing of the Critic (docs/CRITIC_SPEC.md, section 7): does
+# it call for more material when the chunk that carries a deciding course-specific fact is
+# withheld from the first retrieval, and does it stay quiet otherwise?
+#
+# Two kinds of case, in pairs on the same question:
+#   dependent     judging the answer turns on a course-specific fact that only retrieval
+#                 supplies. `fact_ref` points at the fact in data/corpus/retrieval_notes.md;
+#                 `supporting_chunks` lists every corpus chunk that states it. All of them are
+#                 withheld in the "withheld" arm and forced into the first pass in the
+#                 "present" arm.
+#   independent   judging the answer needs no course-specific fact: it matches (or plainly
+#                 does not match) the reference answer that is in the prompt anyway, or it is
+#                 too vague to judge whatever the course says. `independent_kind` says which.
+#
+# `judgement_with_fact` and `judgement_without_fact` are the author's reading, written from
+# the corpus and the reference answers. They document why the case is dependent. They are not
+# labels and no script compares model output with them.
+#
+# Rules for editing: never edit this file once a run has used it; copy it to
+# critic_positive_control_v2.yaml. Keep `provenance: authored` and `authored: true` on every
+# case; the loader (src/pipeline/controls.py) refuses the file without them.
+
+name: critic_positive_control_v1
+version: 1
+provenance: authored
+authored_by: "Claude (Anthropic's AI assistant), for the Misconceptor project"
+authored_on: 2026-11-22
+source_statement: >-
+  Student answers invented for the Critic's positive control; not taken or adapted from
+  annotation/pilot_sheet.csv or from any Mohler ASAG answer; not derived from model output.
+  Questions and reference answers are the seven in-scope Mohler exam questions.
+
+questions:
+  E03.Q06:
+    question: "When defining a recursive function, what are possible causes for infinite recursion?"
+    instructor_answer: "If the recursion step is defined incorrectly, or if the base case is not included."
+  E03.Q07:
+    question: "What are the similarities between iteration and recursion?"
+    instructor_answer: "They both involve repetition; they both have termination tests; they can both occur infinitely."
+  E05.Q03:
+    question: "What is the number of operations for insertion sort under a best-case scenario, and what is the best-case scenario?"
+    instructor_answer: "N (the length of the array) operations achieved for a sorted array."
+  E05.Q04:
+    question: "What is the base case for a recursive implementation of merge sort?"
+    instructor_answer: "When the size of the array to be sorted is 1 (or 2)"
+  E10.Q07:
+    question: "How many comparisons does it take to find an element in a binary search tree?"
+    instructor_answer: "The height of the tree (or log of the number of elements in the tree) ."
+  E12.Q10:
+    question: "How many steps does it take to search a node in a binary search tree?"
+    instructor_answer: "The height of the tree."
+  E11.Q09:
+    question: "Briefly describe the divide-and-conquer paradigm."
+    instructor_answer: "Divide a problem into smaller subproblems, solve them recursively, and then combine the solutions into a solution for the original problem."
+
+cases:
+
+  # ---- pair 1: E03.Q06 ------------------------------------------------------------------
+  - id: pc01d
+    pair: pc01
+    question_id: E03.Q06
+    kind: dependent
+    authored: true
+    student_answer: >-
+      When every call hops over the stopping value, like taking away 2 each time while the
+      function only stops at exactly 0, and it was started on an odd number.
+    fact: >-
+      "Defined incorrectly" means the calls do not converge on the base case: the argument is
+      not reduced, moves the wrong way, or jumps past the base case.
+    fact_ref: "retrieval_notes.md, E03.Q06, fact 2"
+    supporting_chunks: [rec.infinite-recursion, rec.convergence]
+    judgement_with_fact: >-
+      The answer describes, in its own words, the course's first cause (the recursion step is
+      defined incorrectly), so it names an expected cause.
+    judgement_without_fact: >-
+      The reference answer says only "defined incorrectly"; an answer about skipping over the
+      base case can look like a third, unlisted cause.
+
+  - id: pc01i
+    pair: pc01
+    question_id: E03.Q06
+    kind: independent
+    independent_kind: matches_reference
+    authored: true
+    student_answer: >-
+      It happens if you never write a base case, so no call ever comes back without making
+      another call first.
+    why_independent: >-
+      This is the reference answer's second cause (the base case is not included), stated
+      plainly; the reference answer in the prompt settles it.
+
+  # ---- pair 2: E03.Q07 ------------------------------------------------------------------
+  - id: pc02d
+    pair: pc02
+    question_id: E03.Q07
+    kind: dependent
+    authored: true
+    student_answer: >-
+      Whatever you can write with one of them you can also write with the other one, so they
+      are able to solve exactly the same set of problems.
+    fact: >-
+      The two are equally powerful (what can be solved recursively can be solved iteratively
+      and the reverse); this is true in the course but is not one of the three expected
+      similarities.
+    fact_ref: "retrieval_notes.md, E03.Q07, fact 4"
+    supporting_chunks: [rec.iteration-similarities, rec.definition, ia.E11.Q06]
+    judgement_with_fact: >-
+      A true statement in this course, but beside the expected list of three similarities.
+    judgement_without_fact: >-
+      Not among the similarities in the reference answer, so it can be judged a wrong claim,
+      or, by a lenient grader, a complete answer; nothing shown says which.
+
+  - id: pc02i
+    pair: pc02
+    question_id: E03.Q07
+    kind: independent
+    independent_kind: vague
+    authored: true
+    student_answer: >-
+      They are pretty much alike in many ways when you program with them.
+    why_independent: >-
+      Too vague to judge whatever the course says. This is the insufficient_evidence
+      situation, which by the spec must not trigger retrieval.
+
+  # ---- pair 3: E05.Q03 ------------------------------------------------------------------
+  - id: pc03d
+    pair: pc03
+    question_id: E05.Q03
+    kind: dependent
+    authored: true
+    student_answer: >-
+      N minus 1 comparisons, and that is when the list is in order already before the sort
+      starts.
+    fact: >-
+      Strictly the best case is N - 1 comparisons; the course states it as N, and both are
+      O(n).
+    fact_ref: "retrieval_notes.md, E05.Q03, fact 2"
+    supporting_chunks: [ana.insertion-sort]
+    judgement_with_fact: >-
+      The same answer as the reference in this course: N - 1 is the strict count the course
+      rounds to N, and the scenario is right.
+    judgement_without_fact: >-
+      The reference answer says N; going by it alone, N - 1 can be marked as a wrong count.
+
+  - id: pc03i
+    pair: pc03
+    question_id: E05.Q03
+    kind: independent
+    independent_kind: matches_reference
+    authored: true
+    student_answer: >-
+      N operations for an array holding N items, which you get when the items come in sorted
+      order already.
+    why_independent: >-
+      Both parts agree with the reference answer in the prompt (N operations, sorted array).
+
+  # ---- pair 4: E05.Q04 ------------------------------------------------------------------
+  - id: pc04d
+    pair: pc04
+    question_id: E05.Q04
+    kind: dependent
+    authored: true
+    student_answer: >-
+      When the part being sorted is down to two elements, since a pair can simply be compared
+      and swapped.
+    fact: >-
+      Size 2 is accepted because two elements can be sorted directly with one comparison and
+      at most one swap; a base case stated as two elements alone is correct in this course.
+    fact_ref: "retrieval_notes.md, E05.Q04, fact 2"
+    supporting_chunks: [rec.merge-sort-base-case]
+    judgement_with_fact: >-
+      A correct base case in this course, which accepts size 2 on its own, for the reason the
+      student gives.
+    judgement_without_fact: >-
+      The reference answer puts "(or 2)" in parentheses after 1; the usual base case is one
+      element, so two elements alone can be read as a wrong or incomplete base case.
+
+  - id: pc04i
+    pair: pc04
+    question_id: E05.Q04
+    kind: independent
+    independent_kind: matches_reference
+    authored: true
+    student_answer: >-
+      When the part being sorted is down to a single element, since a lone element needs no
+      sorting.
+    why_independent: >-
+      Size 1 is the first thing the reference answer in the prompt says.
+
+  # ---- pair 5: E10.Q07 ------------------------------------------------------------------
+  - id: pc05d
+    pair: pc05
+    question_id: E10.Q07
+    kind: dependent
+    authored: true
+    student_answer: >-
+      n comparisons at worst, which is when the keys went in already sorted and the tree is
+      just one long chain.
+    fact: >-
+      A cost of n (or n - 1) is the cost in a degenerate tree only; a binary search tree
+      becomes a chain when the keys are inserted in sorted order.
+    fact_ref: "retrieval_notes.md, E10.Q07, fact 4"
+    supporting_chunks: [ana.balanced-vs-degenerate]
+    judgement_with_fact: >-
+      A correct worst case in this course: n with the degenerate tree named.
+    judgement_without_fact: >-
+      A count of n reads as a linear scan of the nodes (taxonomy item BOsearchLinearScan); the
+      remaining material says n is a linear-scan count and does not say when n is right.
+
+  - id: pc05i
+    pair: pc05
+    question_id: E10.Q07
+    kind: independent
+    independent_kind: matches_reference
+    authored: true
+    student_answer: >-
+      As many as the tree's height, because the search only walks down a single path starting
+      at the root.
+    why_independent: >-
+      The height is the reference answer in the prompt.
+
+  # ---- pair 6: E10.Q07 (second pair) ------------------------------------------------------
+  - id: pc06d
+    pair: pc06
+    question_id: E10.Q07
+    kind: dependent
+    authored: true
+    student_answer: >-
+      The tree's height plus one, because the root node gets compared as well.
+    fact: >-
+      Counting the root, a search can examine one node more than the height; the course
+      ignores the difference between the height and the height plus one.
+    fact_ref: "retrieval_notes.md, E10.Q07, fact 3"
+    supporting_chunks: [ana.bst-search-height]
+    judgement_with_fact: >-
+      The same answer as the reference in this course, which ignores the off-by-one.
+    judgement_without_fact: >-
+      One more than the reference answer; a grader cannot tell whether the course counts that
+      as wrong.
+
+  - id: pc06i
+    pair: pc06
+    question_id: E10.Q07
+    kind: independent
+    independent_kind: plainly_wrong
+    authored: true
+    student_answer: >-
+      Zero comparisons, because a binary search tree already knows the spot of every element
+      it stores.
+    why_independent: >-
+      Wrong under any course's conventions: a search has to compare the key with at least the
+      root. No course-specific fact bears on it.
+
+  # ---- pair 7: E12.Q10 ------------------------------------------------------------------
+  - id: pc07d
+    pair: pc07
+    question_id: E12.Q10
+    kind: dependent
+    authored: true
+    student_answer: >-
+      Around log n steps, with n being how many nodes the tree is holding.
+    fact: >-
+      The log of the number of elements is accepted as the same answer as the height. The
+      reference answer to this question does not say so; the reference answer to E10.Q07 and
+      the notes do.
+    fact_ref: "retrieval_notes.md, E12.Q10, fact 2"
+    supporting_chunks: [ia.E10.Q07, ana.bst-search-height]
+    judgement_with_fact: >-
+      Accepted in this course as the same answer as the height of the tree.
+    judgement_without_fact: >-
+      This question's reference answer says only "the height of the tree"; log n is not
+      obviously the expected answer, and is only the height when the tree is balanced.
+
+  - id: pc07i
+    pair: pc07
+    question_id: E12.Q10
+    kind: independent
+    independent_kind: matches_reference
+    authored: true
+    student_answer: >-
+      As many steps as the tree is tall, going one level further down with every step.
+    why_independent: >-
+      The height is the reference answer in the prompt.
+
+  # ---- pair 8: E11.Q09 ------------------------------------------------------------------
+  - id: pc08d
+    pair: pc08
+    question_id: E11.Q09
+    kind: dependent
+    authored: true
+    student_answer: >-
+      You break a large program up into separate functions and classes so every piece is
+      simpler to write, and afterwards you join the pieces together.
+    fact: >-
+      In this course the term means the recursive pattern. Splitting a program into
+      functions, classes or files is modular design, not the divide-and-conquer paradigm.
+    fact_ref: "retrieval_notes.md, E11.Q09, fact 2"
+    supporting_chunks: [rec.divide-and-conquer]
+    judgement_with_fact: >-
+      Describes modular design, which this course distinguishes from the paradigm: wrong
+      here, and not a catalogued misconception.
+    judgement_without_fact: >-
+      "Divide and conquer" is also used informally for breaking a programming task into
+      pieces; a grader could accept this as a loose description of dividing and combining.
+
+  - id: pc08i
+    pair: pc08
+    question_id: E11.Q09
+    kind: independent
+    independent_kind: vague
+    authored: true
+    student_answer: >-
+      It is one way of solving problems which gets used a lot in computer science.
+    why_independent: >-
+      Too vague to judge whatever the course says; the insufficient_evidence situation.
