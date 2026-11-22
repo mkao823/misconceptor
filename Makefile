@@ -2,7 +2,7 @@ PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 COND ?= 0
 ARGS ?=
 
-.PHONY: help install test inspect scope baselines eval annotation-check annotation-report
+.PHONY: help install test inspect scope baselines eval annotation-check annotation-report annotate
 
 help:
 	@echo "install    install Python dependencies"
@@ -13,6 +13,7 @@ help:
 	@echo "eval       score a run: make eval RUN=<run_id> [ARGS='--compare <other_run_id>']"
 	@echo "annotation-check   validate the taxonomy and the (partially) labeled pilot sheet"
 	@echo "annotation-report  print JSON progress and label counts for the pilot sheet"
+	@echo "annotate   label the pilot by hand in the terminal, first-session ids first (working copy annotation/my_pass.csv): make annotate [ARGS='--rater NAME']"
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
@@ -41,3 +42,6 @@ annotation-check:
 
 annotation-report:
 	$(PYTHON) scripts/annotation_sheet.py --report
+
+annotate:
+	$(PYTHON) scripts/annotate.py --first-session $(ARGS)
